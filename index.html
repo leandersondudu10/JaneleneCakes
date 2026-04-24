@@ -18,7 +18,7 @@
         button { width: 100%; background: #25d366; color: white; border: none; padding: 18px; border-radius: 10px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
         button:hover { background: #1ebe57; }
         .hidden { display: none; }
-        .info-pagamento { font-size: 0.85em; color: #d81b60; margin-top: 5px; display: block; }
+        .info-pagamento { font-size: 0.85em; color: #d81b60; margin-top: 5px; display: block; font-weight: bold; }
         .footer-info { font-size: 0.8em; text-align: center; margin-top: 15px; color: #999; }
     </style>
 </head>
@@ -96,12 +96,28 @@
     </select>
 
     <label>Forma de Pagamento:</label>
-    <select id="pagamento" onchange="exibirAvisoPagamento()">
+    <select id="pagamento" onchange="exibirOpcoesCredito()">
         <option value="Pix">Pix</option>
         <option value="Débito">Cartão de Débito</option>
         <option value="Crédito">Cartão de Crédito</option>
     </select>
-    <small id="avisoCartao" class="info-pagamento hidden">* Sujeito a juros da maquininha</small>
+
+    <div id="divParcelas" class="hidden">
+        <label>Quantidade de Parcelas:</label>
+        <select id="parcelas">
+            <option value="1x">1x (à vista no crédito)</option>
+            <option value="2x">2x</option>
+            <option value="3x">3x</option>
+            <option value="4x">4x</option>
+            <option value="5x">5x</option>
+            <option value="6x">6x</option>
+            <option value="7x">7x</option>
+            <option value="8x">8x</option>
+            <option value="9x">9x</option>
+            <option value="10x">10x</option>
+        </select>
+        <small class="info-pagamento">* Sujeito a juros da maquininha (fazemos simulação)</small>
+    </div>
 
     <div class="total-box">
         VALOR TOTAL: R$ <span id="valorTotal">90,00</span>
@@ -129,13 +145,13 @@
         }
     }
 
-    function exibirAvisoPagamento() {
+    function exibirOpcoesCredito() {
         const pag = document.getElementById('pagamento').value;
-        const aviso = document.getElementById('avisoCartao');
+        const divParcelas = document.getElementById('divParcelas');
         if (pag === "Crédito") {
-            aviso.classList.remove('hidden');
+            divParcelas.classList.remove('hidden');
         } else {
-            aviso.classList.add('hidden');
+            divParcelas.classList.add('hidden');
         }
     }
 
@@ -157,6 +173,7 @@
         const massa = document.getElementById('massa').value;
         const topo = document.getElementById('topo').options[document.getElementById('topo').selectedIndex].text;
         const pag = document.getElementById('pagamento').value;
+        const parcelas = document.getElementById('parcelas').value;
         const total = document.getElementById('valorTotal').innerText;
 
         const r1Nome = document.getElementById('recheio1').options[document.getElementById('recheio1').selectedIndex].getAttribute('data-nome');
@@ -173,6 +190,11 @@
             recheiosTexto += ` e ${r2Nome}`;
         }
 
+        let formaPagamentoFinal = pag;
+        if (pag === "Crédito") {
+            formaPagamentoFinal += ` (${parcelas})`;
+        }
+
         let dataBR = data.split('-').reverse().join('/');
         let numeroFone = "5585994100016"; 
         
@@ -183,7 +205,7 @@
             `🍞 *Massa:* ${massa}%0A` +
             `🍫 *Recheio:* ${recheiosTexto}%0A` +
             `🎀 *Topo:* ${topo}%0A%0A` +
-            `💵 *Pagamento:* ${pag}%0A` +
+            `💵 *Pagamento:* ${formaPagamentoFinal}%0A` +
             `💰 *Valor Total:* R$ ${total}%0A` +
             `💳 *Entrada (50%):* R$ ${document.getElementById('valorSinal').innerText}`;
 
