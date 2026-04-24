@@ -18,6 +18,7 @@
         button { width: 100%; background: #25d366; color: white; border: none; padding: 18px; border-radius: 10px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
         button:hover { background: #1ebe57; }
         .hidden { display: none; }
+        .info-pagamento { font-size: 0.85em; color: #d81b60; margin-top: 5px; display: block; }
         .footer-info { font-size: 0.8em; text-align: center; margin-top: 15px; color: #999; }
     </style>
 </head>
@@ -94,6 +95,14 @@
         <option value="0">2. Topo a combinar</option>
     </select>
 
+    <label>Forma de Pagamento:</label>
+    <select id="pagamento" onchange="exibirAvisoPagamento()">
+        <option value="Pix">Pix</option>
+        <option value="Débito">Cartão de Débito</option>
+        <option value="Crédito">Cartão de Crédito</option>
+    </select>
+    <small id="avisoCartao" class="info-pagamento hidden">* Sujeito a juros da maquininha</small>
+
     <div class="total-box">
         VALOR TOTAL: R$ <span id="valorTotal">90,00</span>
         <small>Sinal de 50% para reserva: R$ <span id="valorSinal">45,00</span></small>
@@ -120,6 +129,16 @@
         }
     }
 
+    function exibirAvisoPagamento() {
+        const pag = document.getElementById('pagamento').value;
+        const aviso = document.getElementById('avisoCartao');
+        if (pag === "Crédito") {
+            aviso.classList.remove('hidden');
+        } else {
+            aviso.classList.add('hidden');
+        }
+    }
+
     function calcular() {
         let base = parseFloat(document.getElementById('tamanho').value);
         let r1 = parseFloat(document.getElementById('recheio1').value);
@@ -137,6 +156,7 @@
         const fatias = document.getElementById('tamanho').options[document.getElementById('tamanho').selectedIndex].getAttribute('data-fatias');
         const massa = document.getElementById('massa').value;
         const topo = document.getElementById('topo').options[document.getElementById('topo').selectedIndex].text;
+        const pag = document.getElementById('pagamento').value;
         const total = document.getElementById('valorTotal').innerText;
 
         const r1Nome = document.getElementById('recheio1').options[document.getElementById('recheio1').selectedIndex].getAttribute('data-nome');
@@ -154,7 +174,7 @@
         }
 
         let dataBR = data.split('-').reverse().join('/');
-        let numeroFone = "5585997800232"; 
+        let numeroFone = "5585994100016"; 
         
         let mensagem = `Olá Jane! Novo pedido solicitado:%0A%0A` +
             `👤 *Cliente:* ${nome}%0A` +
@@ -163,6 +183,7 @@
             `🍞 *Massa:* ${massa}%0A` +
             `🍫 *Recheio:* ${recheiosTexto}%0A` +
             `🎀 *Topo:* ${topo}%0A%0A` +
+            `💵 *Pagamento:* ${pag}%0A` +
             `💰 *Valor Total:* R$ ${total}%0A` +
             `💳 *Entrada (50%):* R$ ${document.getElementById('valorSinal').innerText}`;
 
