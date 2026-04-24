@@ -90,9 +90,8 @@
 
     <label>Topo do Bolo:</label>
     <select id="topo" onchange="calcular()">
-        <option value="0">Não quero topo</option>
-        <option value="10">Topo Simples - Impressão (+R$ 10,00)</option>
-        <option value="13">Topo Luxo (+R$ 13,00)</option>
+        <option value="0">1. Não quero topo</option>
+        <option value="0">2. Topo a combinar</option>
     </select>
 
     <div class="total-box">
@@ -111,7 +110,7 @@
         const divRecheio2 = document.getElementById('divRecheio2');
         const labelR1 = document.getElementById('labelRecheio1');
 
-        if (tamanho === "90") { // 10 Fatias
+        if (tamanho === "90") { 
             divRecheio2.classList.add('hidden');
             document.getElementById('recheio2').value = "0";
             labelR1.innerText = "Sabor do Recheio:";
@@ -125,9 +124,8 @@
         let base = parseFloat(document.getElementById('tamanho').value);
         let r1 = parseFloat(document.getElementById('recheio1').value);
         let r2 = parseFloat(document.getElementById('recheio2').value);
-        let topo = parseFloat(document.getElementById('topo').value);
         
-        let total = base + r1 + r2 + topo;
+        let total = base + r1 + r2;
         document.getElementById('valorTotal').innerText = total.toFixed(2).replace('.', ',');
         document.getElementById('valorSinal').innerText = (total / 2).toFixed(2).replace('.', ',');
     }
@@ -141,7 +139,6 @@
         const topo = document.getElementById('topo').options[document.getElementById('topo').selectedIndex].text;
         const total = document.getElementById('valorTotal').innerText;
 
-        // Pegar nomes dos recheios
         const r1Nome = document.getElementById('recheio1').options[document.getElementById('recheio1').selectedIndex].getAttribute('data-nome');
         const r2Element = document.getElementById('recheio2');
         const r2Nome = r2Element.options[r2Element.selectedIndex].getAttribute('data-nome');
@@ -157,7 +154,7 @@
         }
 
         let dataBR = data.split('-').reverse().join('/');
-        let numeroFone = "5585994100016"; 
+        let numeroFone = "5585997800232"; 
         
         let mensagem = `Olá Jane! Novo pedido solicitado:%0A%0A` +
             `👤 *Cliente:* ${nome}%0A` +
