@@ -1,1 +1,102 @@
+<!DOCTYPE html>
+<html lang="pt-br">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>JaneleneCakes - Pedido Online</title>
+    <style>
+        body { font-family: sans-serif; background-color: #fce4ec; color: #444; padding: 20px; }
+        .container { max-width: 500px; background: white; padding: 20px; border-radius: 15px; box-shadow: 0 4px 10px rgba(0,0,0,0.1); margin: auto; }
+        h2 { color: #d81b60; text-align: center; }
+        label { font-weight: bold; display: block; margin-top: 15px; }
+        select, input { width: 100%; padding: 10px; margin-top: 5px; border: 1px solid #ddd; border-radius: 8px; box-sizing: border-box; }
+        .total-box { background: #f8bbd0; padding: 15px; border-radius: 8px; margin-top: 20px; text-align: center; font-size: 1.2em; font-weight: bold; }
+        button { width: 100%; background: #25d366; color: white; border: none; padding: 15px; border-radius: 8px; font-size: 1.1em; cursor: pointer; margin-top: 20px; }
+        button:hover { background: #128c7e; }
+    </style>
+</head>
+<body>
 
+<div class="container">
+    <h2>🎂 JaneleneCakes</h2>
+    <p style="text-align: center; font-style: italic;">Tudo feito com muito amor!</p>
+
+    <label>Seu Nome:</label>
+    <input type="text" id="nome" placeholder="Digite seu nome">
+
+    <label>Tamanho do Bolo (Fatias):</label>
+    <select id="tamanho" onchange="calcular()">
+        <option value="90" data-fatias="10">10 Fatias - R$ 90,00</option>
+        <option value="120" data-fatias="18">18 Fatias - R$ 120,00</option>
+        <option value="150" data-fatias="28">28 Fatias - R$ 150,00</option>
+        <option value="185" data-fatias="40">40 Fatias - R$ 185,00</option>
+    </select>
+
+    <label>Massa do Bolo:</label>
+    <select id="massa">
+        <option>Baunilha</option>
+        <option>Chocolate</option>
+        <option>Formigueiro</option>
+        <option>Mesclado</option>
+        <option>Napolitano</option>
+        <option>Red Velvet</option>
+    </select>
+
+    <label>Sabor do Recheio:</label>
+    <select id="recheio" onchange="calcular()">
+        <option value="0">Brigadeiro / Ninho / Beijinho / Limão</option>
+        <option value="5">Crocante / Oreo / Paçoca (+R$ 5,00)</option>
+        <option value="10">Abacaxi / Morango (+R$ 10,00)</option>
+    </select>
+
+    <label>Topo do Bolo:</label>
+    <select id="topo" onchange="calcular()">
+        <option value="0">Não quero topo</option>
+        <option value="10">Topo Simples (+R$ 10,00)</option>
+        <option value="13">Topo Luxo (+R$ 13,00)</option>
+    </select>
+
+    <div class="total-box">
+        Total: R$ <span id="valorTotal">90,00</span><br>
+        <small>Sinal de 50%: R$ <span id="valorSinal">45,00</span></small>
+    </div>
+
+    <button onclick="enviarWhatsApp()">Enviar Pedido no WhatsApp 📱</button>
+</div>
+
+<script>
+    function calcular() {
+        let base = parseFloat(document.getElementById('tamanho').value);
+        let recheioExtra = parseFloat(document.getElementById('recheio').value);
+        let topo = parseFloat(document.getElementById('topo').value);
+        
+        let total = base + recheioExtra + topo;
+        document.getElementById('valorTotal').innerText = total.toFixed(2).replace('.', ',');
+        document.getElementById('valorSinal').innerText = (total / 2).toFixed(2).replace('.', ',');
+    }
+
+    function enviarWhatsApp() {
+        let nome = document.getElementById('nome').value;
+        let fatias = document.getElementById('tamanho').options[document.getElementById('tamanho').selectedIndex].getAttribute('data-fatias');
+        let massa = document.getElementById('massa').value;
+        let recheio = document.getElementById('recheio').options[document.getElementById('recheio').selectedIndex].text;
+        let topo = document.getElementById('topo').options[document.getElementById('topo').selectedIndex].text;
+        let total = document.getElementById('valorTotal').innerText;
+
+        if(!nome) { alert("Por favor, digite seu nome."); return; }
+
+        let numeroFone = "55XXXXXXXXXXX"; // COLOQUE SEU NUMERO AQUI (DDD + NUMERO)
+        let mensagem = `Olá Jane! Novo pedido de: *${nome}*%0A%0A` +
+            `🎂 *Bolo:* ${fatias} fatias%0A` +
+            `🍞 *Massa:* ${massa}%0A` +
+            `🍫 *Recheio:* ${recheio}%0A` +
+            `🎀 *Topo:* ${topo}%0A%0A` +
+            `💰 *Total:* R$ ${total}%0A` +
+            `✅ *Sinal (50%):* R$ ${document.getElementById('valorSinal').innerText}`;
+
+        window.open(`https://wa.me/${numeroFone}?text=${mensagem}`, '_blank');
+    }
+</script>
+
+</body>
+</html>
