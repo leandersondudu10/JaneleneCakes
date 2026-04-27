@@ -44,6 +44,7 @@
 
     <label>Tamanho do Bolo:</label>
     <select id="tamanho" onchange="toggleRecheios(); calcular();">
+        <option value="">-- Selecione o Tamanho --</option>
         <option value="90" data-fatias="10">10 Fatias - R$ 90,00</option>
         <option value="120" data-fatias="18">18 Fatias - R$ 120,00</option>
         <option value="150" data-fatias="28">28 Fatias - R$ 150,00</option>
@@ -52,6 +53,7 @@
 
     <label>Massa do Bolo:</label>
     <select id="massa">
+        <option value="">-- Selecione a Massa --</option>
         <option>Baunilha</option>
         <option>Chocolate</option>
         <option>Formigueiro</option>
@@ -62,6 +64,7 @@
 
     <label id="labelRecheio1">Sabor do Recheio:</label>
     <select id="recheio1" onchange="calcular()">
+        <option value="">-- Selecione o Recheio --</option>
         <option value="0" data-nome="Brigadeiro">Brigadeiro de Chocolate</option>
         <option value="0" data-nome="Ninho">Ninho</option>
         <option value="0" data-nome="Beijinho">Beijinho</option>
@@ -91,12 +94,14 @@
 
     <label>Topo do Bolo:</label>
     <select id="topo" onchange="calcular()">
+        <option value="">-- Selecione o Topo --</option>
         <option value="0">1. Não quero topo</option>
         <option value="0">2. Topo a combinar</option>
     </select>
 
     <label>Forma de Pagamento:</label>
     <select id="pagamento" onchange="exibirOpcoesCredito()">
+        <option value="">-- Selecione o Pagamento --</option>
         <option value="Pix">Pix</option>
         <option value="Débito">Cartão de Débito</option>
         <option value="Crédito">Cartão de Crédito</option>
@@ -120,8 +125,8 @@
     </div>
 
     <div class="total-box">
-        VALOR TOTAL: R$ <span id="valorTotal">90,00</span>
-        <small>Sinal de 50% para reserva: R$ <span id="valorSinal">45,00</span></small>
+        VALOR TOTAL: R$ <span id="valorTotal">0,00</span>
+        <small>Sinal de 50% para reserva: R$ <span id="valorSinal">0,00</span></small>
     </div>
 
     <button onclick="enviarWhatsApp()">Confirmar Pedido via WhatsApp 📱</button>
@@ -139,6 +144,8 @@
             divRecheio2.classList.add('hidden');
             document.getElementById('recheio2').value = "0";
             labelR1.innerText = "Sabor do Recheio:";
+        } else if (tamanho === "") {
+            divRecheio2.classList.add('hidden');
         } else {
             divRecheio2.classList.remove('hidden');
             labelR1.innerText = "1º Sabor de Recheio:";
@@ -156,9 +163,16 @@
     }
 
     function calcular() {
-        let base = parseFloat(document.getElementById('tamanho').value);
-        let r1 = parseFloat(document.getElementById('recheio1').value);
-        let r2 = parseFloat(document.getElementById('recheio2').value);
+        let valTamanho = document.getElementById('tamanho').value;
+        if(valTamanho === "") {
+            document.getElementById('valorTotal').innerText = "0,00";
+            document.getElementById('valorSinal').innerText = "0,00";
+            return;
+        }
+
+        let base = parseFloat(valTamanho);
+        let r1 = parseFloat(document.getElementById('recheio1').value || 0);
+        let r2 = parseFloat(document.getElementById('recheio2').value || 0);
         
         let total = base + r1 + r2;
         document.getElementById('valorTotal').innerText = total.toFixed(2).replace('.', ',');
@@ -169,21 +183,27 @@
         const nome = document.getElementById('nome').value;
         const data = document.getElementById('data').value;
         const hora = document.getElementById('hora').value;
-        const fatias = document.getElementById('tamanho').options[document.getElementById('tamanho').selectedIndex].getAttribute('data-fatias');
+        const selectTamanho = document.getElementById('tamanho');
         const massa = document.getElementById('massa').value;
-        const topo = document.getElementById('topo').options[document.getElementById('topo').selectedIndex].text;
+        const recheio1 = document.getElementById('recheio1').value;
+        const topo = document.getElementById('topo').value;
         const pag = document.getElementById('pagamento').value;
-        const parcelas = document.getElementById('parcelas').value;
-        const total = document.getElementById('valorTotal').innerText;
 
+        // VALIDAÇÕES
+        if(!nome || !data || !hora) { alert("Preencha Nome, Data e Hora, por favor!"); return; }
+        if(!selectTamanho.value) { alert("Por favor, selecione o Tamanho do Bolo!"); return; }
+        if(!massa) { alert("Por favor, selecione a Massa do Bolo!"); return; }
+        if(recheio1 === "") { alert("Por favor, selecione o Recheio!"); return; }
+        if(topo === "") { alert("Por favor, selecione a opção do Topo!"); return; }
+        if(!pag) { alert("Por favor, selecione a Forma de Pagamento!"); return; }
+
+        const fatias = selectTamanho.options[selectTamanho.selectedIndex].getAttribute('data-fatias');
         const r1Nome = document.getElementById('recheio1').options[document.getElementById('recheio1').selectedIndex].getAttribute('data-nome');
         const r2Element = document.getElementById('recheio2');
         const r2Nome = r2Element.options[r2Element.selectedIndex].getAttribute('data-nome');
-
-        if(!nome || !data || !hora) { 
-            alert("Preencha Nome, Data e Hora, por favor!"); 
-            return; 
-        }
+        const topoTexto = document.getElementById('topo').options[document.getElementById('topo').selectedIndex].text;
+        const parcelas = document.getElementById('parcelas').value;
+        const total = document.getElementById('valorTotal').innerText;
 
         let recheiosTexto = r1Nome;
         if (fatias !== "10" && r2Nome !== "Nenhum") {
@@ -196,7 +216,7 @@
         }
 
         let dataBR = data.split('-').reverse().join('/');
-        let numeroFone = "5585997800232"; 
+        let numeroFone = "5585994100016"; 
         
         let mensagem = `Olá Jane! Novo pedido solicitado:%0A%0A` +
             `👤 *Cliente:* ${nome}%0A` +
@@ -204,7 +224,7 @@
             `🎂 *Bolo:* ${fatias} fatias%0A` +
             `🍞 *Massa:* ${massa}%0A` +
             `🍫 *Recheio:* ${recheiosTexto}%0A` +
-            `🎀 *Topo:* ${topo}%0A%0A` +
+            `🎀 *Topo:* ${topoTexto}%0A%0A` +
             `💵 *Pagamento:* ${formaPagamentoFinal}%0A` +
             `💰 *Valor Total:* R$ ${total}%0A` +
             `💳 *Entrada (50%):* R$ ${document.getElementById('valorSinal').innerText}`;
