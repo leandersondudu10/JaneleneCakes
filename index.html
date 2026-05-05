@@ -8,15 +8,25 @@
         body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fff5f8; color: #444; padding: 15px; }
         .container { max-width: 450px; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(216, 27, 96, 0.1); margin: auto; }
         h2 { color: #d81b60; text-align: center; margin-bottom: 5px; }
-        p.subtitle { text-align: center; font-style: italic; color: #ad1457; margin-bottom: 20px; }
+        p.subtitle { text-align: center; font-style: italic; color: #ad1457; margin-bottom: 10px; }
+        
+        /* Botão do Cardápio */
+        .btn-cardapio { display: block; width: fit-content; margin: 0 auto 20px; background: #fce4ec; color: #d81b60; border: 1px solid #d81b60; padding: 10px 20px; border-radius: 20px; font-size: 0.9em; font-weight: bold; cursor: pointer; transition: 0.3s; }
+        .btn-cardapio:hover { background: #f8bbd0; }
+
+        /* Estilo da Janela da Foto (Modal) */
+        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); }
+        .modal-content { margin: auto; display: block; width: 90%; max-width: 500px; border-radius: 10px; margin-top: 50px; }
+        .close-modal { position: absolute; top: 15px; right: 25px; color: white; font-size: 40px; font-weight: bold; cursor: pointer; }
+
         label { font-weight: bold; display: block; margin-top: 15px; color: #880e4f; }
         select, input { width: 100%; padding: 12px; margin-top: 5px; border: 2px solid #fce4ec; border-radius: 10px; box-sizing: border-box; outline: none; transition: 0.3s; font-size: 14px; }
         select:focus, input:focus { border-color: #f06292; }
         .total-box { background: #fce4ec; padding: 20px; border-radius: 12px; margin-top: 25px; text-align: center; border: 1px dashed #d81b60; }
         .total-box span { font-size: 1.4em; color: #d81b60; display: block; font-weight: bold; }
         .total-box small { color: #ad1457; font-weight: bold; }
-        button { width: 100%; background: #25d366; color: white; border: none; padding: 18px; border-radius: 10px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
-        button:hover { background: #1ebe57; }
+        button.btn-whatsapp { width: 100%; background: #25d366; color: white; border: none; padding: 18px; border-radius: 10px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
+        button.btn-whatsapp:hover { background: #1ebe57; }
         .hidden { display: none; }
         .info-pagamento { font-size: 0.85em; color: #d81b60; margin-top: 5px; display: block; font-weight: bold; }
         .footer-info { font-size: 0.8em; text-align: center; margin-top: 15px; color: #999; }
@@ -27,6 +37,8 @@
 <div class="container">
     <h2>🎂 JaneleneCakes</h2>
     <p class="subtitle">Tudo feito com muito amor 💝</p>
+
+    <button class="btn-cardapio" onclick="abrirModal()">📖 Ver Cardápio de Sabores</button>
 
     <label>Seu Nome:</label>
     <input type="text" id="nome" placeholder="Ex: Maria Silva">
@@ -121,25 +133,32 @@
             <option value="9x">9x</option>
             <option value="10x">10x</option>
         </select>
-        <small class="info-pagamento">* Sujeito a juros da maquininha (fazemos simulação)</small>
+        <small class="info-pagamento">* Sujeito a juros da maquininha</small>
     </div>
 
     <div class="total-box">
         VALOR TOTAL: R$ <span id="valorTotal">0,00</span>
-        <small>Sinal de 50% para reserva: R$ <span id="valorSinal">0,00</span></small>
+        <small>Entrada (50%): R$ <span id="valorSinal">0,00</span></small>
     </div>
 
-    <button onclick="enviarWhatsApp()">Confirmar Pedido via WhatsApp 📱</button>
+    <button class="btn-whatsapp" onclick="enviarWhatsApp()">Confirmar Pedido via WhatsApp 📱</button>
     
     <p class="footer-info">⚠️ Obs: Bolos possuem canudos de sustentação. Cuidado ao cortar!</p>
 </div>
 
+<div id="modalCardapio" class="modal" onclick="fecharModal()">
+    <span class="close-modal">&times;</span>
+    <img class="modal-content" src="cardapio.jpg" alt="Cardápio">
+</div>
+
 <script>
+    function abrirModal() { document.getElementById('modalCardapio').style.display = "block"; }
+    function fecharModal() { document.getElementById('modalCardapio').style.display = "none"; }
+
     function toggleRecheios() {
         const tamanho = document.getElementById('tamanho').value;
         const divRecheio2 = document.getElementById('divRecheio2');
         const labelR1 = document.getElementById('labelRecheio1');
-
         if (tamanho === "90") { 
             divRecheio2.classList.add('hidden');
             document.getElementById('recheio2').value = "0";
@@ -155,11 +174,8 @@
     function exibirOpcoesCredito() {
         const pag = document.getElementById('pagamento').value;
         const divParcelas = document.getElementById('divParcelas');
-        if (pag === "Crédito") {
-            divParcelas.classList.remove('hidden');
-        } else {
-            divParcelas.classList.add('hidden');
-        }
+        if (pag === "Crédito") { divParcelas.classList.remove('hidden'); } 
+        else { divParcelas.classList.add('hidden'); }
     }
 
     function calcular() {
@@ -169,11 +185,9 @@
             document.getElementById('valorSinal').innerText = "0,00";
             return;
         }
-
         let base = parseFloat(valTamanho);
         let r1 = parseFloat(document.getElementById('recheio1').value || 0);
         let r2 = parseFloat(document.getElementById('recheio2').value || 0);
-        
         let total = base + r1 + r2;
         document.getElementById('valorTotal').innerText = total.toFixed(2).replace('.', ',');
         document.getElementById('valorSinal').innerText = (total / 2).toFixed(2).replace('.', ',');
@@ -189,13 +203,10 @@
         const topo = document.getElementById('topo').value;
         const pag = document.getElementById('pagamento').value;
 
-        // VALIDAÇÕES
-        if(!nome || !data || !hora) { alert("Preencha Nome, Data e Hora, por favor!"); return; }
-        if(!selectTamanho.value) { alert("Por favor, selecione o Tamanho do Bolo!"); return; }
-        if(!massa) { alert("Por favor, selecione a Massa do Bolo!"); return; }
-        if(recheio1 === "") { alert("Por favor, selecione o Recheio!"); return; }
-        if(topo === "") { alert("Por favor, selecione a opção do Topo!"); return; }
-        if(!pag) { alert("Por favor, selecione a Forma de Pagamento!"); return; }
+        if(!nome || !data || !hora || !selectTamanho.value || !massa || recheio1 === "" || topo === "" || !pag) { 
+            alert("Por favor, preencha todos os campos do formulário!"); 
+            return; 
+        }
 
         const fatias = selectTamanho.options[selectTamanho.selectedIndex].getAttribute('data-fatias');
         const r1Nome = document.getElementById('recheio1').options[document.getElementById('recheio1').selectedIndex].getAttribute('data-nome');
@@ -206,14 +217,10 @@
         const total = document.getElementById('valorTotal').innerText;
 
         let recheiosTexto = r1Nome;
-        if (fatias !== "10" && r2Nome !== "Nenhum") {
-            recheiosTexto += ` e ${r2Nome}`;
-        }
+        if (fatias !== "10" && r2Nome !== "Nenhum") { recheiosTexto += ` e ${r2Nome}`; }
 
         let formaPagamentoFinal = pag;
-        if (pag === "Crédito") {
-            formaPagamentoFinal += ` (${parcelas})`;
-        }
+        if (pag === "Crédito") { formaPagamentoFinal += ` (${parcelas})`; }
 
         let dataBR = data.split('-').reverse().join('/');
         let numeroFone = "558597800232"; 
