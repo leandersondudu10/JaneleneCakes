@@ -27,6 +27,9 @@
         select, input { width: 100%; padding: 12px; margin-top: 5px; border: 2px solid #fce4ec; border-radius: 10px; box-sizing: border-box; outline: none; transition: 0.3s; font-size: 14px; }
         select:focus, input:focus { border-color: #f06292; }
         
+        /* Seção em destaque para Cupcakes */
+        .cupcake-box { background: #fff0f5; border: 2px dashed #f06292; padding: 15px; border-radius: 12px; margin-top: 15px; }
+
         .total-box { background: #fce4ec; padding: 20px; border-radius: 12px; margin-top: 25px; text-align: center; border: 1px dashed #d81b60; }
         .total-box span { font-size: 1.4em; color: #d81b60; display: block; font-weight: bold; }
         .total-box small { color: #ad1457; font-weight: bold; }
@@ -127,6 +130,46 @@
         <option value="0">2. Topo a combinar</option>
     </select>
 
+    <!-- Seção de Cupcakes -->
+    <label>Deseja adicionar Cupcakes ao pedido? 🧁</label>
+    <select id="desejaCupcake" onchange="toggleCupcakes(); calcular();">
+        <option value="nao">Não</option>
+        <option value="sim">Sim</option>
+    </select>
+
+    <div id="divCupcakes" class="cupcake-box hidden">
+        <label style="margin-top:0;">Quantidade de Cupcakes:</label>
+        <select id="qtdCupcake" onchange="calcular()">
+            <option value="6">6 Unidades</option>
+            <option value="10">10 Unidades</option>
+            <option value="12">12 Unidades</option>
+            <option value="15">15 Unidades</option>
+            <option value="20">20 Unidades</option>
+            <option value="24">24 Unidades</option>
+        </select>
+
+        <label>Com Topo no Cupcake?</label>
+        <select id="topoCupcake" onchange="calcular()">
+            <option value="6">Sem topo (R$ 6,00/un)</option>
+            <option value="7">Com topo (R$ 7,00/un)</option>
+        </select>
+
+        <label>Massa do Cupcake:</label>
+        <select id="massaCupcake">
+            <option value="">-- Selecione a Massa --</option>
+            <option>Baunilha</option>
+            <option>Chocolate</option>
+            <option>Formigueiro</option>
+        </select>
+
+        <label>Recheio do Cupcake:</label>
+        <select id="recheioCupcake">
+            <option value="">-- Selecione o Recheio --</option>
+            <option>Brigadeiro Branco</option>
+            <option>Brigadeiro de Chocolate</option>
+        </select>
+    </div>
+
     <label>Forma de Pagamento:</label>
     <select id="pagamento" onchange="exibirOpcoesCredito()">
         <option value="">-- Selecione o Pagamento --</option>
@@ -173,7 +216,6 @@
 </div>
 
 <script>
-    // Travar data retroativa (não permite datas antes de hoje)
     document.getElementById('data').min = new Date().toISOString().split("T")[0];
 
     function abrirModal() { document.getElementById('modalCardapio').style.display = "block"; }
@@ -184,7 +226,6 @@
         const divRecheio2 = document.getElementById('divRecheio2');
         const labelR1 = document.getElementById('labelRecheio1');
         
-        // 12 Fatias possui valor 100
         if (tamanho === "100") { 
             divRecheio2.classList.add('hidden');
             document.getElementById('recheio2').value = "0";
@@ -194,6 +235,16 @@
         } else {
             divRecheio2.classList.remove('hidden');
             labelR1.innerText = "1º Sabor de Recheio:";
+        }
+    }
+
+    function toggleCupcakes() {
+        const querCupcake = document.getElementById('desejaCupcake').value;
+        const divCupcakes = document.getElementById('divCupcakes');
+        if (querCupcake === "sim") {
+            divCupcakes.classList.remove('hidden');
+        } else {
+            divCupcakes.classList.add('hidden');
         }
     }
 
@@ -214,7 +265,15 @@
         let base = parseFloat(valTamanho);
         let r1 = parseFloat(document.getElementById('recheio1').value || 0);
         let r2 = parseFloat(document.getElementById('recheio2').value || 0);
-        let total = base + r1 + r2;
+        
+        let valorCupcakes = 0;
+        if (document.getElementById('desejaCupcake').value === "sim") {
+            let qtd = parseInt(document.getElementById('qtdCupcake').value);
+            let precoUnitario = parseFloat(document.getElementById('topoCupcake').value);
+            valorCupcakes = qtd * precoUnitario;
+        }
+
+        let total = base + r1 + r2 + valorCupcakes;
         document.getElementById('valorTotal').innerText = total.toFixed(2).replace('.', ',');
         document.getElementById('valorSinal').innerText = (total / 2).toFixed(2).replace('.', ',');
     }
@@ -230,9 +289,19 @@
         const pag = document.getElementById('pagamento').value;
         const aceite = document.getElementById('aceiteTermos').checked;
 
+        // Cupcakes
+        const querCupcake = document.getElementById('desejaCupcake').value;
+        const massaCupcake = document.getElementById('massaCupcake').value;
+        const recheioCupcake = document.getElementById('recheioCupcake').value;
+
         if(!nome || !data || !hora || !selectTamanho.value || !massa || recheio1 === "" || topo === "" || !pag) { 
             alert("Por favor, preencha todos os campos obrigatórios!"); 
             return; 
+        }
+
+        if (querCupcake === "sim" && (!massaCupcake || !recheioCupcake)) {
+            alert("Por favor, selecione a Massa e o Recheio do Cupcake!");
+            return;
         }
 
         if(!aceite) {
@@ -254,6 +323,13 @@
         let formaPagamentoFinal = pag;
         if (pag === "Crédito") { formaPagamentoFinal += ` (${parcelas})`; }
 
+        let textoCupcake = "Não";
+        if (querCupcake === "sim") {
+            const qtdCup = document.getElementById('qtdCupcake').value;
+            const comTopo = document.getElementById('topoCupcake').value === "7" ? "Com topo" : "Sem topo";
+            textoCupcake = `${qtdCup} un. (${comTopo} | Massa: ${massaCupcake} | Recheio: ${recheioCupcake})`;
+        }
+
         let dataBR = data.split('-').reverse().join('/');
         let numeroFone = "558597800232"; 
         
@@ -261,9 +337,10 @@
             `👤 *Cliente:* ${nome}%0A` +
             `📅 *Data:* ${dataBR} às ${hora}%0A` +
             `🎂 *Bolo:* ${fatias} fatias%0A` +
-            `🍞 *Massa:* ${massa}%0A` +
-            `🍫 *Recheio:* ${recheiosTexto}%0A` +
-            `🎀 *Topo:* ${topoTexto}%0A%0A` +
+            `🍞 *Massa Bolo:* ${massa}%0A` +
+            `🍫 *Recheio Bolo:* ${recheiosTexto}%0A` +
+            `🎀 *Topo:* ${topoTexto}%0A` +
+            `🧁 *Cupcakes:* ${textoCupcake}%0A%0A` +
             `💵 *Pagamento:* ${formaPagamentoFinal}%0A` +
             `💰 *Valor Total:* R$ ${total}%0A` +
             `💳 *Entrada (50%):* R$ ${document.getElementById('valorSinal').innerText}%0A%0A` +
