@@ -170,6 +170,11 @@
             justify-content: space-between;
             margin-bottom: 6px;
             color: #555;
+            gap: 10px;
+        }
+
+        .resumo-item strong {
+            text-align: right;
         }
 
         .total-box {
@@ -292,7 +297,7 @@
     <label>Tamanho do Bolo <span class="req">*</span></label>
     <div class="cards-grid">
         <div class="card-option" onclick="selecionarTamanho('100', '12', this)">
-            <strong>10 Fatias</strong>
+            <strong>12 Fatias</strong>
             <span>R$ 100,00</span>
         </div>
         <div class="card-option" onclick="selecionarTamanho('130', '18', this)">
@@ -428,6 +433,7 @@
     <div class="resumo-box">
         <h4>📋 Resumo do Seu Pedido:</h4>
         <div class="resumo-item"><span>Bolo:</span> <strong id="resBolo">Não selecionado</strong></div>
+        <div class="resumo-item"><span>Massa do Bolo:</span> <strong id="resMassaBolo">-</strong></div>
         <div class="resumo-item"><span>Recheio(s):</span> <strong id="resRecheio">-</strong></div>
         <div class="resumo-item"><span>Cupcakes:</span> <strong id="resCupcake">Não</strong></div>
     </div>
@@ -450,7 +456,7 @@
 <!-- Modal com Imagem do Cardápio -->
 <div id="modalCardapio" class="modal" onclick="fecharModal()">
     <span class="close-modal">&times;</span>
-    <img class="modal-content" src="cardapio.jpeg" alt="Cardápio JaneleneCakes">
+    <img class="modal-content" src="IMG-20260424-WA0001.jpg?v=2" alt="Cardápio JaneleneCakes">
 </div>
 
 <script>
@@ -519,6 +525,9 @@
         const tam = document.getElementById('tamanho').value;
         document.getElementById('resBolo').innerText = tam ? `${fatiasSelecionadas} Fatias` : 'Não selecionado';
 
+        const massa = document.getElementById('massa').value;
+        document.getElementById('resMassaBolo').innerText = massa ? massa : '-';
+
         const r1Select = document.getElementById('recheio1');
         const r1Nome = r1Select.options[r1Select.selectedIndex]?.getAttribute('data-nome') || '';
         const r2Select = document.getElementById('recheio2');
@@ -537,7 +546,15 @@
         const querCupcake = document.getElementById('desejaCupcake').value;
         if (querCupcake === "sim") {
             const qtd = document.getElementById('qtdCupcake').value;
-            document.getElementById('resCupcake').innerText = `${qtd} Unidades`;
+            const comTopo = document.getElementById('topoCupcake').value === "7" ? "C/ topo" : "S/ topo";
+            const massaCup = document.getElementById('massaCupcake').value;
+            const recheioCup = document.getElementById('recheioCupcake').value;
+
+            let detalheCupcake = `${qtd} un. (${comTopo})`;
+            if (massaCup || recheioCup) {
+                detalheCupcake += ` | ${massaCup || 'Massa?'} + ${recheioCup || 'Recheio?'}`;
+            }
+            document.getElementById('resCupcake').innerText = detalheCupcake;
         } else {
             document.getElementById('resCupcake').innerText = 'Não';
         }
@@ -600,7 +617,7 @@
             topoTexto = document.getElementById('topo').options[document.getElementById('topo').selectedIndex].text;
 
             recheiosTexto = r1Nome;
-            if (fatias !== "10 fatias" && r2Nome !== "Nenhum") { recheiosTexto += ` e ${r2Nome}`; }
+            if (fatias !== "12 fatias" && r2Nome !== "Nenhum") { recheiosTexto += ` e ${r2Nome}`; }
         }
 
         const parcelas = document.getElementById('parcelas').value;
