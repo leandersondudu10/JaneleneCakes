@@ -5,81 +5,314 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>JaneleneCakes - Pedido Online</title>
     <style>
-        body { font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif; background-color: #fff5f8; color: #444; padding: 15px; }
-        .container { max-width: 450px; background: white; padding: 25px; border-radius: 20px; box-shadow: 0 10px 25px rgba(216, 27, 96, 0.1); margin: auto; }
-        h2 { color: #d81b60; text-align: center; margin-bottom: 5px; }
-        p.subtitle { text-align: center; font-style: italic; color: #ad1457; margin-bottom: 5px; }
-        
-        .insta-link { display: flex; align-items: center; justify-content: center; color: #e1306c; font-weight: bold; text-decoration: none; font-size: 0.9em; margin-bottom: 15px; gap: 5px; }
-        .insta-link:hover { text-decoration: underline; }
+        :root {
+            --primary: #d81b60;
+            --primary-light: #fce4ec;
+            --primary-dark: #ad1457;
+            --bg-color: #fff5f8;
+            --card-bg: #ffffff;
+            --text-color: #444444;
+            --border-radius: 16px;
+        }
 
-        .btn-cardapio { display: block; width: fit-content; margin: 0 auto 20px; background: #fce4ec; color: #d81b60; border: 1px solid #d81b60; padding: 10px 20px; border-radius: 20px; font-size: 0.9em; font-weight: bold; cursor: pointer; transition: 0.3s; }
-        .btn-cardapio:hover { background: #f8bbd0; }
+        body {
+            font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
+            background-color: var(--bg-color);
+            color: var(--text-color);
+            padding: 15px;
+            margin: 0;
+        }
 
-        .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); overflow-y: auto; }
-        .modal-content { margin: auto; display: block; width: 95%; max-width: 500px; border-radius: 10px; margin-top: 50px; margin-bottom: 50px; }
-        .close-modal { position: absolute; top: 15px; right: 25px; color: white; font-size: 40px; font-weight: bold; cursor: pointer; }
+        .container {
+            max-width: 480px;
+            background: var(--card-bg);
+            padding: 25px;
+            border-radius: 24px;
+            box-shadow: 0 12px 30px rgba(216, 27, 96, 0.08);
+            margin: auto;
+        }
 
-        label { font-weight: bold; display: block; margin-top: 15px; color: #880e4f; }
-        select, input { width: 100%; padding: 12px; margin-top: 5px; border: 2px solid #fce4ec; border-radius: 10px; box-sizing: border-box; outline: none; transition: 0.3s; font-size: 14px; }
-        select:focus, input:focus { border-color: #f06292; }
-        
-        .cupcake-box { background: #fff0f5; border: 2px dashed #f06292; padding: 15px; border-radius: 12px; margin-top: 15px; }
+        .header {
+            text-align: center;
+            margin-bottom: 20px;
+        }
 
-        .total-box { background: #fce4ec; padding: 20px; border-radius: 12px; margin-top: 25px; text-align: center; border: 1px dashed #d81b60; }
-        .total-box span { font-size: 1.4em; color: #d81b60; display: block; font-weight: bold; }
-        .total-box small { color: #ad1457; font-weight: bold; }
-        
-        .termos { margin-top: 20px; background: #fff; border: 1px solid #fce4ec; padding: 10px; border-radius: 10px; display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
-        .termos input { width: auto; margin-top: 3px; cursor: pointer; }
-        .termos span { font-size: 0.85em; color: #d81b60; line-height: 1.4; font-weight: 500; }
+        h2 {
+            color: var(--primary);
+            margin: 0 0 5px 0;
+            font-size: 1.8em;
+        }
 
-        button.btn-whatsapp { width: 100%; background: #25d366; color: white; border: none; padding: 18px; border-radius: 10px; font-size: 1.1em; font-weight: bold; cursor: pointer; margin-top: 20px; box-shadow: 0 4px 10px rgba(37, 211, 102, 0.3); }
-        button.btn-whatsapp:hover { background: #1ebe57; }
-        
+        p.subtitle {
+            font-style: italic;
+            color: var(--primary-dark);
+            margin: 0 0 15px 0;
+            font-size: 0.95em;
+        }
+
+        .insta-link {
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            color: #e1306c;
+            font-weight: 600;
+            text-decoration: none;
+            font-size: 0.9em;
+            background: #fff;
+            border: 1px solid #f8bbd0;
+            padding: 6px 16px;
+            border-radius: 20px;
+            gap: 6px;
+            transition: all 0.3s;
+        }
+
+        .btn-cardapio {
+            display: block;
+            width: 100%;
+            background: var(--primary-light);
+            color: var(--primary);
+            border: 2px solid var(--primary);
+            padding: 12px;
+            border-radius: var(--border-radius);
+            font-size: 0.95em;
+            font-weight: bold;
+            cursor: pointer;
+            margin: 15px 0;
+            transition: 0.3s;
+        }
+
+        label {
+            font-weight: 700;
+            display: block;
+            margin-top: 18px;
+            color: #880e4f;
+            font-size: 0.9em;
+            text-transform: uppercase;
+            letter-spacing: 0.5px;
+        }
+
+        label span.req {
+            color: var(--primary);
+        }
+
+        select, input {
+            width: 100%;
+            padding: 14px;
+            margin-top: 6px;
+            border: 2px solid #f8bbd0;
+            border-radius: var(--border-radius);
+            box-sizing: border-box;
+            outline: none;
+            transition: 0.3s;
+            font-size: 15px;
+            background-color: #fff;
+        }
+
+        select:focus, input:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 4px rgba(216, 27, 96, 0.1);
+        }
+
+        /* Card Selectors */
+        .cards-grid {
+            display: grid;
+            grid-template-columns: 1fr 1fr;
+            gap: 10px;
+            margin-top: 8px;
+        }
+
+        .card-option {
+            border: 2px solid #f8bbd0;
+            border-radius: var(--border-radius);
+            padding: 12px;
+            text-align: center;
+            cursor: pointer;
+            transition: all 0.2s ease;
+            background: #fff;
+        }
+
+        .card-option strong {
+            display: block;
+            color: var(--primary-dark);
+            font-size: 1.05em;
+        }
+
+        .card-option span {
+            font-size: 0.85em;
+            color: #666;
+        }
+
+        .card-option.selected {
+            border-color: var(--primary);
+            background-color: var(--primary-light);
+            box-shadow: 0 4px 10px rgba(216, 27, 96, 0.15);
+        }
+
+        /* Caixa de Resumo */
+        .resumo-box {
+            background: #fff;
+            border: 2px solid var(--primary-light);
+            border-radius: var(--border-radius);
+            padding: 15px;
+            margin-top: 20px;
+            font-size: 0.9em;
+        }
+
+        .resumo-box h4 {
+            margin: 0 0 10px 0;
+            color: var(--primary);
+            border-bottom: 1px dashed #f8bbd0;
+            padding-bottom: 5px;
+        }
+
+        .resumo-item {
+            display: flex;
+            justify-content: space-between;
+            margin-bottom: 6px;
+            color: #555;
+        }
+
+        .total-box {
+            background: var(--primary-light);
+            padding: 20px;
+            border-radius: var(--border-radius);
+            margin-top: 20px;
+            text-align: center;
+            border: 2px dashed var(--primary);
+        }
+
+        .total-box span {
+            font-size: 1.6em;
+            color: var(--primary);
+            display: block;
+            font-weight: bold;
+        }
+
+        .cupcake-box {
+            background: #fff0f5;
+            border: 2px dashed #f06292;
+            padding: 18px;
+            border-radius: var(--border-radius);
+            margin-top: 15px;
+        }
+
+        .termos {
+            margin-top: 20px;
+            background: #fff;
+            border: 1px solid #fce4ec;
+            padding: 12px;
+            border-radius: var(--border-radius);
+            display: flex;
+            align-items: flex-start;
+            gap: 10px;
+            cursor: pointer;
+        }
+
+        .termos input { width: auto; margin-top: 3px; }
+        .termos span { font-size: 0.85em; color: var(--primary); line-height: 1.4; }
+
+        button.btn-whatsapp {
+            width: 100%;
+            background: #25d366;
+            color: white;
+            border: none;
+            padding: 18px;
+            border-radius: var(--border-radius);
+            font-size: 1.1em;
+            font-weight: bold;
+            cursor: pointer;
+            margin-top: 20px;
+            box-shadow: 0 6px 15px rgba(37, 211, 102, 0.3);
+            transition: 0.3s;
+        }
+
         .hidden { display: none; }
-        .info-pagamento { font-size: 0.85em; color: #d81b60; margin-top: 5px; display: block; font-weight: bold; }
-        .footer-info { font-size: 0.8em; text-align: center; margin-top: 15px; color: #999; }
+
+        /* Modal Galeria */
+        .modal {
+            display: none;
+            position: fixed;
+            z-index: 1000;
+            left: 0;
+            top: 0;
+            width: 100%;
+            height: 100%;
+            background-color: rgba(0,0,0,0.9);
+            overflow-y: auto;
+        }
+
+        .modal-content {
+            margin: auto;
+            display: block;
+            width: 90%;
+            max-width: 500px;
+            border-radius: 16px;
+            margin-top: 40px;
+            margin-bottom: 40px;
+        }
+
+        .close-modal {
+            position: absolute;
+            top: 15px;
+            right: 25px;
+            color: white;
+            font-size: 40px;
+            font-weight: bold;
+            cursor: pointer;
+        }
     </style>
 </head>
 <body>
 
 <div class="container">
-    <h2>🎂 JaneleneCakes</h2>
-    <p class="subtitle">Tudo feito com muito amor 💝</p>
-    
-    <a href="https://www.instagram.com/janelenecakes_confeitaria?igsh=ZG02Nzh4ZDd1ZXkx" target="_blank" class="insta-link">
-        <span>📸</span> @janelenecakes_confeitaria
-    </a>
+    <div class="header">
+        <h2>🎂 JaneleneCakes</h2>
+        <p class="subtitle">Confeitaria Artesanal & Afeto 💝</p>
+        <a href="https://www.instagram.com/janelenecakes_confeitaria?igsh=ZG02Nzh4ZDd1ZXkx" target="_blank" class="insta-link">
+            <span>📸</span> @janelenecakes_confeitaria
+        </a>
+    </div>
 
-    <button class="btn-cardapio" onclick="abrirModal()">📖 Ver Cardápio de Sabores</button>
+    <button class="btn-cardapio" onclick="abrirModal()">📖 Ver Cardápio & Fotos de Referência</button>
 
-    <label>Seu Nome:</label>
+    <label>Seu Nome <span class="req">*</span></label>
     <input type="text" id="nome" placeholder="Ex: Maria Silva">
 
     <div style="display: flex; gap: 10px;">
         <div style="flex: 1;">
-            <label>Data:</label>
+            <label>Data <span class="req">*</span></label>
             <input type="date" id="data">
         </div>
         <div style="flex: 1;">
-            <label>Hora:</label>
+            <label>Hora <span class="req">*</span></label>
             <input type="time" id="hora">
         </div>
     </div>
 
-    <label>Tamanho do Bolo:</label>
-    <select id="tamanho" onchange="toggleRecheios(); calcular();">
-        <option value="">-- Não quero bolo / Selecione --</option>
-        <option value="100" data-fatias="12">12 Fatias - R$ 100,00</option>
-        <option value="130" data-fatias="18">18 Fatias - R$ 130,00</option>
-        <option value="160" data-fatias="28">28 Fatias - R$ 160,00</option>
-        <option value="200" data-fatias="40">40 Fatias - R$ 200,00</option>
-    </select>
+    <label>Tamanho do Bolo <span class="req">*</span></label>
+    <div class="cards-grid">
+        <div class="card-option" onclick="selecionarTamanho('100', '12', this)">
+            <strong>12 Fatias</strong>
+            <span>R$ 100,00</span>
+        </div>
+        <div class="card-option" onclick="selecionarTamanho('130', '18', this)">
+            <strong>18 Fatias</strong>
+            <span>R$ 130,00</span>
+        </div>
+        <div class="card-option" onclick="selecionarTamanho('160', '28', this)">
+            <strong>28 Fatias</strong>
+            <span>R$ 160,00</span>
+        </div>
+        <div class="card-option" onclick="selecionarTamanho('200', '40', this)">
+            <strong>40 Fatias</strong>
+            <span>R$ 200,00</span>
+        </div>
+    </div>
+    <input type="hidden" id="tamanho" value="">
 
     <div id="divDetalhesBolo">
-        <label>Massa do Bolo:</label>
-        <select id="massa">
+        <label>Massa do Bolo <span class="req">*</span></label>
+        <select id="massa" onchange="atualizarResumo()">
             <option value="">-- Selecione a Massa --</option>
             <option>Baunilha</option>
             <option>Chocolate</option>
@@ -89,8 +322,8 @@
             <option>Red Velvet</option>
         </select>
 
-        <label id="labelRecheio1">Sabor do Recheio:</label>
-        <select id="recheio1" onchange="calcular()">
+        <label id="labelRecheio1">Sabor do Recheio <span class="req">*</span></label>
+        <select id="recheio1" onchange="calcular(); atualizarResumo();">
             <option value="">-- Selecione o Recheio --</option>
             <option value="0" data-nome="Brigadeiro Branco">Brigadeiro Branco</option>
             <option value="0" data-nome="Brigadeiro Ninho">Brigadeiro Ninho</option>
@@ -104,9 +337,9 @@
         </select>
 
         <div id="divRecheio2" class="hidden">
-            <label>2º Sabor de Recheio (Opcional):</label>
-            <select id="recheio2" onchange="calcular()">
-                <option value="0" data-nome="Nenhum">-- Deseja apenas um sabor --</option>
+            <label>2º Sabor de Recheio (Opcional)</label>
+            <select id="recheio2" onchange="calcular(); atualizarResumo();">
+                <option value="0" data-nome="Nenhum">-- Apenas 1 Sabor --</option>
                 <option value="0" data-nome="Brigadeiro Branco">Brigadeiro Branco</option>
                 <option value="0" data-nome="Brigadeiro Ninho">Brigadeiro Ninho</option>
                 <option value="0" data-nome="Brigadeiro Chocolate">Brigadeiro Chocolate</option>
@@ -119,24 +352,24 @@
             </select>
         </div>
 
-        <label>Topo do Bolo:</label>
-        <select id="topo" onchange="calcular()">
+        <label>Topo do Bolo <span class="req">*</span></label>
+        <select id="topo" onchange="calcular(); atualizarResumo();">
             <option value="">-- Selecione o Topo --</option>
-            <option value="0">1. Não quero topo</option>
+            <option value="0">1. Sem topo</option>
             <option value="0">2. Topo a combinar</option>
         </select>
     </div>
 
-    <!-- Seção de Cupcakes -->
+    <!-- Adicionar Cupcakes -->
     <label>Deseja adicionar Cupcakes ao pedido? 🧁</label>
-    <select id="desejaCupcake" onchange="toggleCupcakes(); calcular();">
+    <select id="desejaCupcake" onchange="toggleCupcakes(); calcular(); atualizarResumo();">
         <option value="nao">Não</option>
         <option value="sim">Sim</option>
     </select>
 
     <div id="divCupcakes" class="cupcake-box hidden">
         <label style="margin-top:0;">Quantidade de Cupcakes:</label>
-        <select id="qtdCupcake" onchange="calcular()">
+        <select id="qtdCupcake" onchange="calcular(); atualizarResumo();">
             <option value="6">6 Unidades</option>
             <option value="10">10 Unidades</option>
             <option value="12">12 Unidades</option>
@@ -145,14 +378,14 @@
             <option value="24">24 Unidades</option>
         </select>
 
-        <label>Com Topo no Cupcake?</label>
-        <select id="topoCupcake" onchange="calcular()">
+        <label>Topo no Cupcake?</label>
+        <select id="topoCupcake" onchange="calcular(); atualizarResumo();">
             <option value="6">Sem topo (R$ 6,00/un)</option>
             <option value="7">Com topo (R$ 7,00/un)</option>
         </select>
 
         <label>Massa do Cupcake:</label>
-        <select id="massaCupcake">
+        <select id="massaCupcake" onchange="atualizarResumo()">
             <option value="">-- Selecione a Massa --</option>
             <option>Baunilha</option>
             <option>Chocolate</option>
@@ -160,14 +393,14 @@
         </select>
 
         <label>Recheio do Cupcake:</label>
-        <select id="recheioCupcake">
+        <select id="recheioCupcake" onchange="atualizarResumo()">
             <option value="">-- Selecione o Recheio --</option>
             <option>Brigadeiro Branco</option>
             <option>Brigadeiro de Chocolate</option>
         </select>
     </div>
 
-    <label>Forma de Pagamento:</label>
+    <label>Forma de Pagamento <span class="req">*</span></label>
     <select id="pagamento" onchange="exibirOpcoesCredito()">
         <option value="">-- Selecione o Pagamento --</option>
         <option value="Pix">Pix</option>
@@ -189,24 +422,32 @@
             <option value="9x">9x</option>
             <option value="10x">10x</option>
         </select>
-        <small class="info-pagamento">* Sujeito a juros da maquininha</small>
+    </div>
+
+    <!-- Resumo Vivo -->
+    <div class="resumo-box">
+        <h4>📋 Resumo do Seu Pedido:</h4>
+        <div class="resumo-item"><span>Bolo:</span> <strong id="resBolo">Não selecionado</strong></div>
+        <div class="resumo-item"><span>Recheio(s):</span> <strong id="resRecheio">-</strong></div>
+        <div class="resumo-item"><span>Cupcakes:</span> <strong id="resCupcake">Não</strong></div>
     </div>
 
     <div class="total-box">
         VALOR TOTAL: R$ <span id="valorTotal">0,00</span>
-        <small>Sinal para Reserva (50%): R$ <span id="valorSinal">0,00</span></small>
+        <small style="color: #ad1457; font-weight: bold; display: block; margin-top: 5px;">
+            Sinal para Reserva (50%): R$ <span id="valorSinal">0,00</span>
+        </small>
     </div>
 
     <label class="termos">
         <input type="checkbox" id="aceiteTermos">
-        <span>Estou ciente de que os bolos possuem canudos de sustentação internos e devem ser removidos ao cortar. ⚠️</span>
+        <span>Estou ciente de que os bolos possuem suporte interno e devem ser removidos ao cortar. ⚠️</span>
     </label>
 
     <button class="btn-whatsapp" onclick="enviarWhatsApp()">Confirmar Pedido via WhatsApp 📱</button>
-    
-    <p class="footer-info">JaneleneCakes - Confeitaria Artesanal</p>
 </div>
 
+<!-- Modal com Imagem do Cardápio -->
 <div id="modalCardapio" class="modal" onclick="fecharModal()">
     <span class="close-modal">&times;</span>
     <img class="modal-content" src="IMG-20260424-WA0001.jpg" alt="Cardápio JaneleneCakes">
@@ -215,24 +456,28 @@
 <script>
     document.getElementById('data').min = new Date().toISOString().split("T")[0];
 
-    function abrirModal() { document.getElementById('modalCardapio').style.display = "block"; }
-    function fecharModal() { document.getElementById('modalCardapio').style.display = "none"; }
+    let fatiasSelecionadas = "";
 
-    function toggleRecheios() {
-        const tamanho = document.getElementById('tamanho').value;
+    function selecionarTamanho(valor, fatias, elemento) {
+        document.querySelectorAll('.card-option').forEach(c => c.classList.remove('selected'));
+        elemento.classList.add('selected');
+        document.getElementById('tamanho').value = valor;
+        fatiasSelecionadas = fatias;
+
         const divRecheio2 = document.getElementById('divRecheio2');
         const labelR1 = document.getElementById('labelRecheio1');
-        
-        if (tamanho === "100") { 
+
+        if (valor === "100") {
             divRecheio2.classList.add('hidden');
             document.getElementById('recheio2').value = "0";
-            labelR1.innerText = "Sabor do Recheio:";
-        } else if (tamanho === "") {
-            divRecheio2.classList.add('hidden');
+            labelR1.innerHTML = 'Sabor do Recheio <span class="req">*</span>';
         } else {
             divRecheio2.classList.remove('hidden');
-            labelR1.innerText = "1º Sabor de Recheio:";
+            labelR1.innerHTML = '1º Sabor de Recheio <span class="req">*</span>';
         }
+
+        calcular();
+        atualizarResumo();
     }
 
     function toggleCupcakes() {
@@ -270,11 +515,42 @@
         document.getElementById('valorSinal').innerText = (total / 2).toFixed(2).replace('.', ',');
     }
 
+    function atualizarResumo() {
+        const tam = document.getElementById('tamanho').value;
+        document.getElementById('resBolo').innerText = tam ? `${fatiasSelecionadas} Fatias` : 'Não selecionado';
+
+        const r1Select = document.getElementById('recheio1');
+        const r1Nome = r1Select.options[r1Select.selectedIndex]?.getAttribute('data-nome') || '';
+        const r2Select = document.getElementById('recheio2');
+        const r2Nome = r2Select.options[r2Select.selectedIndex]?.getAttribute('data-nome') || '';
+
+        if (r1Nome) {
+            let textoR = r1Nome;
+            if (fatiasSelecionadas !== "12" && r2Nome && r2Nome !== "Nenhum") {
+                textoR += ` + ${r2Nome}`;
+            }
+            document.getElementById('resRecheio').innerText = textoR;
+        } else {
+            document.getElementById('resRecheio').innerText = '-';
+        }
+
+        const querCupcake = document.getElementById('desejaCupcake').value;
+        if (querCupcake === "sim") {
+            const qtd = document.getElementById('qtdCupcake').value;
+            document.getElementById('resCupcake').innerText = `${qtd} Unidades`;
+        } else {
+            document.getElementById('resCupcake').innerText = 'Não';
+        }
+    }
+
+    function abrirModal() { document.getElementById('modalCardapio').style.display = "block"; }
+    function fecharModal() { document.getElementById('modalCardapio').style.display = "none"; }
+
     function enviarWhatsApp() {
         const nome = document.getElementById('nome').value;
         const data = document.getElementById('data').value;
         const hora = document.getElementById('hora').value;
-        const selectTamanho = document.getElementById('tamanho');
+        const tam = document.getElementById('tamanho').value;
         const massa = document.getElementById('massa').value;
         const recheio1 = document.getElementById('recheio1').value;
         const topo = document.getElementById('topo').value;
@@ -285,33 +561,30 @@
         const massaCupcake = document.getElementById('massaCupcake').value;
         const recheioCupcake = document.getElementById('recheioCupcake').value;
 
-        // Validações básicas
         if(!nome || !data || !hora || !pag) { 
             alert("Por favor, preencha Nome, Data, Hora e Forma de Pagamento!"); 
             return; 
         }
 
-        if(!selectTamanho.value && querCupcake === "nao") {
-            alert("Por favor, escolha um bolo ou selecione a opção de Cupcakes!");
+        if(!tam && querCupcake === "nao") {
+            alert("Escolha um tamanho de bolo ou marque 'Sim' nos cupcakes!");
             return;
         }
 
-        // Se escolheu bolo, valida os campos do bolo
-        if(selectTamanho.value !== "") {
+        if(tam !== "") {
             if(!massa || recheio1 === "" || topo === "") {
-                alert("Por favor, preencha todos os campos referentes ao bolo!");
+                alert("Preencha todos os campos do bolo (Massa, Recheio e Topo)!");
                 return;
             }
         }
 
-        // Se escolheu cupcakes, valida os campos dos cupcakes
         if (querCupcake === "sim" && (!massaCupcake || !recheioCupcake)) {
-            alert("Por favor, selecione a Massa e o Recheio do Cupcake!");
+            alert("Selecione a Massa e Recheio do Cupcake!");
             return;
         }
 
         if(!aceite) {
-            alert("Por favor, confirme que está ciente sobre os canudos de sustentação no final do formulário.");
+            alert("Por favor, confirme que está ciente sobre as hastes internas de sustentação.");
             return;
         }
 
@@ -319,8 +592,8 @@
         let recheiosTexto = "Nenhum";
         let topoTexto = "Nenhum";
 
-        if(selectTamanho.value !== "") {
-            fatias = selectTamanho.options[selectTamanho.selectedIndex].getAttribute('data-fatias') + " fatias";
+        if(tam !== "") {
+            fatias = fatiasSelecionadas + " fatias";
             const r1Nome = document.getElementById('recheio1').options[document.getElementById('recheio1').selectedIndex].getAttribute('data-nome');
             const r2Element = document.getElementById('recheio2');
             const r2Nome = r2Element.options[r2Element.selectedIndex].getAttribute('data-nome');
@@ -350,7 +623,7 @@
             `👤 *Cliente:* ${nome}%0A` +
             `📅 *Data:* ${dataBR} às ${hora}%0A` +
             `🎂 *Bolo:* ${fatias}%0A` +
-            (selectTamanho.value !== "" ? `🍞 *Massa Bolo:* ${massa}%0A🍫 *Recheio Bolo:* ${recheiosTexto}%0A🎀 *Topo:* ${topoTexto}%0A` : "") +
+            (tam !== "" ? `🍞 *Massa Bolo:* ${massa}%0A🍫 *Recheio Bolo:* ${recheiosTexto}%0A🎀 *Topo:* ${topoTexto}%0A` : "") +
             `🧁 *Cupcakes:* ${textoCupcake}%0A%0A` +
             `💵 *Pagamento:* ${formaPagamentoFinal}%0A` +
             `💰 *Valor Total:* R$ ${total}%0A` +
