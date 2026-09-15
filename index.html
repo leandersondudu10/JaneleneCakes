@@ -10,15 +10,12 @@
         h2 { color: #d81b60; text-align: center; margin-bottom: 5px; }
         p.subtitle { text-align: center; font-style: italic; color: #ad1457; margin-bottom: 5px; }
         
-        /* Link do Instagram Estilizado */
         .insta-link { display: flex; align-items: center; justify-content: center; color: #e1306c; font-weight: bold; text-decoration: none; font-size: 0.9em; margin-bottom: 15px; gap: 5px; }
         .insta-link:hover { text-decoration: underline; }
 
-        /* Botão do Cardápio */
         .btn-cardapio { display: block; width: fit-content; margin: 0 auto 20px; background: #fce4ec; color: #d81b60; border: 1px solid #d81b60; padding: 10px 20px; border-radius: 20px; font-size: 0.9em; font-weight: bold; cursor: pointer; transition: 0.3s; }
         .btn-cardapio:hover { background: #f8bbd0; }
 
-        /* Estilo da Janela da Foto (Modal) */
         .modal { display: none; position: fixed; z-index: 1000; left: 0; top: 0; width: 100%; height: 100%; background-color: rgba(0,0,0,0.9); overflow-y: auto; }
         .modal-content { margin: auto; display: block; width: 95%; max-width: 500px; border-radius: 10px; margin-top: 50px; margin-bottom: 50px; }
         .close-modal { position: absolute; top: 15px; right: 25px; color: white; font-size: 40px; font-weight: bold; cursor: pointer; }
@@ -27,14 +24,12 @@
         select, input { width: 100%; padding: 12px; margin-top: 5px; border: 2px solid #fce4ec; border-radius: 10px; box-sizing: border-box; outline: none; transition: 0.3s; font-size: 14px; }
         select:focus, input:focus { border-color: #f06292; }
         
-        /* Seção em destaque para Cupcakes */
         .cupcake-box { background: #fff0f5; border: 2px dashed #f06292; padding: 15px; border-radius: 12px; margin-top: 15px; }
 
         .total-box { background: #fce4ec; padding: 20px; border-radius: 12px; margin-top: 25px; text-align: center; border: 1px dashed #d81b60; }
         .total-box span { font-size: 1.4em; color: #d81b60; display: block; font-weight: bold; }
         .total-box small { color: #ad1457; font-weight: bold; }
         
-        /* Checkbox de Segurança */
         .termos { margin-top: 20px; background: #fff; border: 1px solid #fce4ec; padding: 10px; border-radius: 10px; display: flex; align-items: flex-start; gap: 10px; cursor: pointer; }
         .termos input { width: auto; margin-top: 3px; cursor: pointer; }
         .termos span { font-size: 0.85em; color: #d81b60; line-height: 1.4; font-weight: 500; }
@@ -268,8 +263,8 @@
         
         let valorCupcakes = 0;
         if (document.getElementById('desejaCupcake').value === "sim") {
-            let qtd = parseInt(document.getElementById('qtdCupcake').value);
-            let precoUnitario = parseFloat(document.getElementById('topoCupcake').value);
+            let qtd = parseInt(document.getElementById('qtdCupcake').value || 0);
+            let precoUnitario = parseFloat(document.getElementById('topoCupcake').value || 0);
             valorCupcakes = qtd * precoUnitario;
         }
 
@@ -289,7 +284,6 @@
         const pag = document.getElementById('pagamento').value;
         const aceite = document.getElementById('aceiteTermos').checked;
 
-        // Cupcakes
         const querCupcake = document.getElementById('desejaCupcake').value;
         const massaCupcake = document.getElementById('massaCupcake').value;
         const recheioCupcake = document.getElementById('recheioCupcake').value;
