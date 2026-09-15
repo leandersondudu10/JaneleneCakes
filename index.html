@@ -70,42 +70,28 @@
 
     <label>Tamanho do Bolo:</label>
     <select id="tamanho" onchange="toggleRecheios(); calcular();">
-        <option value="">-- Selecione o Tamanho --</option>
+        <option value="">-- Não quero bolo / Selecione --</option>
         <option value="100" data-fatias="12">12 Fatias - R$ 100,00</option>
         <option value="130" data-fatias="18">18 Fatias - R$ 130,00</option>
         <option value="160" data-fatias="28">28 Fatias - R$ 160,00</option>
         <option value="200" data-fatias="40">40 Fatias - R$ 200,00</option>
     </select>
 
-    <label>Massa do Bolo:</label>
-    <select id="massa">
-        <option value="">-- Selecione a Massa --</option>
-        <option>Baunilha</option>
-        <option>Chocolate</option>
-        <option>Formigueiro</option>
-        <option>Mesclado</option>
-        <option>Napolitano</option>
-        <option>Red Velvet</option>
-    </select>
+    <div id="divDetalhesBolo">
+        <label>Massa do Bolo:</label>
+        <select id="massa">
+            <option value="">-- Selecione a Massa --</option>
+            <option>Baunilha</option>
+            <option>Chocolate</option>
+            <option>Formigueiro</option>
+            <option>Mesclado</option>
+            <option>Napolitano</option>
+            <option>Red Velvet</option>
+        </select>
 
-    <label id="labelRecheio1">Sabor do Recheio:</label>
-    <select id="recheio1" onchange="calcular()">
-        <option value="">-- Selecione o Recheio --</option>
-        <option value="0" data-nome="Brigadeiro Branco">Brigadeiro Branco</option>
-        <option value="0" data-nome="Brigadeiro Ninho">Brigadeiro Ninho</option>
-        <option value="0" data-nome="Brigadeiro Chocolate">Brigadeiro Chocolate</option>
-        <option value="7" data-nome="Brigadeiro de Limão">Brigadeiro de Limão (+R$ 7,00)</option>
-        <option value="7" data-nome="Brigadeiro de Paçoca">Brigadeiro de Paçoca (+R$ 7,00)</option>
-        <option value="7" data-nome="Brigadeiro Oreo">Brigadeiro Oreo (+R$ 7,00)</option>
-        <option value="10" data-nome="Brigadeiro de Maracujá">Brigadeiro de Maracujá (+R$ 10,00)</option>
-        <option value="12" data-nome="Delícia de Abacaxi">Delícia de Abacaxi (+R$ 12,00)</option>
-        <option value="15" data-nome="Delícia de Morango">Delícia de Morango (+R$ 15,00)</option>
-    </select>
-
-    <div id="divRecheio2" class="hidden">
-        <label>2º Sabor de Recheio (Opcional):</label>
-        <select id="recheio2" onchange="calcular()">
-            <option value="0" data-nome="Nenhum">-- Deseja apenas um sabor --</option>
+        <label id="labelRecheio1">Sabor do Recheio:</label>
+        <select id="recheio1" onchange="calcular()">
+            <option value="">-- Selecione o Recheio --</option>
             <option value="0" data-nome="Brigadeiro Branco">Brigadeiro Branco</option>
             <option value="0" data-nome="Brigadeiro Ninho">Brigadeiro Ninho</option>
             <option value="0" data-nome="Brigadeiro Chocolate">Brigadeiro Chocolate</option>
@@ -116,14 +102,30 @@
             <option value="12" data-nome="Delícia de Abacaxi">Delícia de Abacaxi (+R$ 12,00)</option>
             <option value="15" data-nome="Delícia de Morango">Delícia de Morango (+R$ 15,00)</option>
         </select>
-    </div>
 
-    <label>Topo do Bolo:</label>
-    <select id="topo" onchange="calcular()">
-        <option value="">-- Selecione o Topo --</option>
-        <option value="0">1. Não quero topo</option>
-        <option value="0">2. Topo a combinar</option>
-    </select>
+        <div id="divRecheio2" class="hidden">
+            <label>2º Sabor de Recheio (Opcional):</label>
+            <select id="recheio2" onchange="calcular()">
+                <option value="0" data-nome="Nenhum">-- Deseja apenas um sabor --</option>
+                <option value="0" data-nome="Brigadeiro Branco">Brigadeiro Branco</option>
+                <option value="0" data-nome="Brigadeiro Ninho">Brigadeiro Ninho</option>
+                <option value="0" data-nome="Brigadeiro Chocolate">Brigadeiro Chocolate</option>
+                <option value="7" data-nome="Brigadeiro de Limão">Brigadeiro de Limão (+R$ 7,00)</option>
+                <option value="7" data-nome="Brigadeiro de Paçoca">Brigadeiro de Paçoca (+R$ 7,00)</option>
+                <option value="7" data-nome="Brigadeiro Oreo">Brigadeiro Oreo (+R$ 7,00)</option>
+                <option value="10" data-nome="Brigadeiro de Maracujá">Brigadeiro de Maracujá (+R$ 10,00)</option>
+                <option value="12" data-nome="Delícia de Abacaxi">Delícia de Abacaxi (+R$ 12,00)</option>
+                <option value="15" data-nome="Delícia de Morango">Delícia de Morango (+R$ 15,00)</option>
+            </select>
+        </div>
+
+        <label>Topo do Bolo:</label>
+        <select id="topo" onchange="calcular()">
+            <option value="">-- Selecione o Topo --</option>
+            <option value="0">1. Não quero topo</option>
+            <option value="0">2. Topo a combinar</option>
+        </select>
+    </div>
 
     <!-- Seção de Cupcakes -->
     <label>Deseja adicionar Cupcakes ao pedido? 🧁</label>
@@ -252,12 +254,7 @@
 
     function calcular() {
         let valTamanho = document.getElementById('tamanho').value;
-        if(valTamanho === "") {
-            document.getElementById('valorTotal').innerText = "0,00";
-            document.getElementById('valorSinal').innerText = "0,00";
-            return;
-        }
-        let base = parseFloat(valTamanho);
+        let base = valTamanho !== "" ? parseFloat(valTamanho) : 0;
         let r1 = parseFloat(document.getElementById('recheio1').value || 0);
         let r2 = parseFloat(document.getElementById('recheio2').value || 0);
         
@@ -288,11 +285,26 @@
         const massaCupcake = document.getElementById('massaCupcake').value;
         const recheioCupcake = document.getElementById('recheioCupcake').value;
 
-        if(!nome || !data || !hora || !selectTamanho.value || !massa || recheio1 === "" || topo === "" || !pag) { 
-            alert("Por favor, preencha todos os campos obrigatórios!"); 
+        // Validações básicas
+        if(!nome || !data || !hora || !pag) { 
+            alert("Por favor, preencha Nome, Data, Hora e Forma de Pagamento!"); 
             return; 
         }
 
+        if(!selectTamanho.value && querCupcake === "nao") {
+            alert("Por favor, escolha um bolo ou selecione a opção de Cupcakes!");
+            return;
+        }
+
+        // Se escolheu bolo, valida os campos do bolo
+        if(selectTamanho.value !== "") {
+            if(!massa || recheio1 === "" || topo === "") {
+                alert("Por favor, preencha todos os campos referentes ao bolo!");
+                return;
+            }
+        }
+
+        // Se escolheu cupcakes, valida os campos dos cupcakes
         if (querCupcake === "sim" && (!massaCupcake || !recheioCupcake)) {
             alert("Por favor, selecione a Massa e o Recheio do Cupcake!");
             return;
@@ -303,16 +315,23 @@
             return;
         }
 
-        const fatias = selectTamanho.options[selectTamanho.selectedIndex].getAttribute('data-fatias');
-        const r1Nome = document.getElementById('recheio1').options[document.getElementById('recheio1').selectedIndex].getAttribute('data-nome');
-        const r2Element = document.getElementById('recheio2');
-        const r2Nome = r2Element.options[r2Element.selectedIndex].getAttribute('data-nome');
-        const topoTexto = document.getElementById('topo').options[document.getElementById('topo').selectedIndex].text;
+        let fatias = "Não solicitado";
+        let recheiosTexto = "Nenhum";
+        let topoTexto = "Nenhum";
+
+        if(selectTamanho.value !== "") {
+            fatias = selectTamanho.options[selectTamanho.selectedIndex].getAttribute('data-fatias') + " fatias";
+            const r1Nome = document.getElementById('recheio1').options[document.getElementById('recheio1').selectedIndex].getAttribute('data-nome');
+            const r2Element = document.getElementById('recheio2');
+            const r2Nome = r2Element.options[r2Element.selectedIndex].getAttribute('data-nome');
+            topoTexto = document.getElementById('topo').options[document.getElementById('topo').selectedIndex].text;
+
+            recheiosTexto = r1Nome;
+            if (fatias !== "12 fatias" && r2Nome !== "Nenhum") { recheiosTexto += ` e ${r2Nome}`; }
+        }
+
         const parcelas = document.getElementById('parcelas').value;
         const total = document.getElementById('valorTotal').innerText;
-
-        let recheiosTexto = r1Nome;
-        if (fatias !== "12" && r2Nome !== "Nenhum") { recheiosTexto += ` e ${r2Nome}`; }
 
         let formaPagamentoFinal = pag;
         if (pag === "Crédito") { formaPagamentoFinal += ` (${parcelas})`; }
@@ -330,10 +349,8 @@
         let mensagem = `Olá Jane! Novo pedido solicitado:%0A%0A` +
             `👤 *Cliente:* ${nome}%0A` +
             `📅 *Data:* ${dataBR} às ${hora}%0A` +
-            `🎂 *Bolo:* ${fatias} fatias%0A` +
-            `🍞 *Massa Bolo:* ${massa}%0A` +
-            `🍫 *Recheio Bolo:* ${recheiosTexto}%0A` +
-            `🎀 *Topo:* ${topoTexto}%0A` +
+            `🎂 *Bolo:* ${fatias}%0A` +
+            (selectTamanho.value !== "" ? `🍞 *Massa Bolo:* ${massa}%0A🍫 *Recheio Bolo:* ${recheiosTexto}%0A🎀 *Topo:* ${topoTexto}%0A` : "") +
             `🧁 *Cupcakes:* ${textoCupcake}%0A%0A` +
             `💵 *Pagamento:* ${formaPagamentoFinal}%0A` +
             `💰 *Valor Total:* R$ ${total}%0A` +
