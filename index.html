@@ -292,7 +292,7 @@
     <label>Tamanho do Bolo <span class="req">*</span></label>
     <div class="cards-grid">
         <div class="card-option" onclick="selecionarTamanho('100', '12', this)">
-            <strong>12 Fatias</strong>
+            <strong>10 Fatias</strong>
             <span>R$ 100,00</span>
         </div>
         <div class="card-option" onclick="selecionarTamanho('130', '18', this)">
@@ -600,7 +600,7 @@
             topoTexto = document.getElementById('topo').options[document.getElementById('topo').selectedIndex].text;
 
             recheiosTexto = r1Nome;
-            if (fatias !== "12 fatias" && r2Nome !== "Nenhum") { recheiosTexto += ` e ${r2Nome}`; }
+            if (fatias !== "10 fatias" && r2Nome !== "Nenhum") { recheiosTexto += ` e ${r2Nome}`; }
         }
 
         const parcelas = document.getElementById('parcelas').value;
