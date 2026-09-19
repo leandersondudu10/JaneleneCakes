@@ -296,8 +296,8 @@
 
     <label>Tamanho do Bolo <span class="req">*</span></label>
     <div class="cards-grid">
-        <div class="card-option" onclick="selecionarTamanho('100', '12', this)">
-            <strong>12 Fatias</strong>
+        <div class="card-option" onclick="selecionarTamanho('100', '10', this)">
+            <strong>10 Fatias</strong>
             <span>R$ 100,00</span>
         </div>
         <div class="card-option" onclick="selecionarTamanho('130', '18', this)">
@@ -456,7 +456,7 @@
 <!-- Modal com Imagem do Cardápio -->
 <div id="modalCardapio" class="modal" onclick="fecharModal()">
     <span class="close-modal">&times;</span>
-    <img class="modal-content" src="cardapio.jpeg" alt="Cardápio JaneleneCakes">
+    <img class="modal-content" src="IMG-20260424-WA0001.jpg?v=2" alt="Cardápio JaneleneCakes">
 </div>
 
 <script>
@@ -535,7 +535,7 @@
 
         if (r1Nome) {
             let textoR = r1Nome;
-            if (fatiasSelecionadas !== "12" && r2Nome && r2Nome !== "Nenhum") {
+            if (fatiasSelecionadas !== "10" && r2Nome && r2Nome !== "Nenhum") {
                 textoR += ` + ${r2Nome}`;
             }
             document.getElementById('resRecheio').innerText = textoR;
@@ -617,7 +617,7 @@
             topoTexto = document.getElementById('topo').options[document.getElementById('topo').selectedIndex].text;
 
             recheiosTexto = r1Nome;
-            if (fatias !== "12 fatias" && r2Nome !== "Nenhum") { recheiosTexto += ` e ${r2Nome}`; }
+            if (fatias !== "10 fatias" && r2Nome !== "Nenhum") { recheiosTexto += ` e ${r2Nome}`; }
         }
 
         const parcelas = document.getElementById('parcelas').value;
