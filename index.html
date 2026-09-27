@@ -2,7 +2,7 @@
 <html lang="pt-br">
 <head>
     <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0, viewport-fit=cover">
     <title>JaneleneCakes - Pedido Online</title>
     <style>
         :root {
@@ -13,13 +13,18 @@
             --card-bg: #ffffff;
             --text-color: #444444;
             --border-radius: 16px;
+            --error: #e53935;
         }
+
+        * { box-sizing: border-box; }
 
         body {
             font-family: 'Segoe UI', system-ui, -apple-system, sans-serif;
             background-color: var(--bg-color);
             color: var(--text-color);
             padding: 15px;
+            padding-top: calc(15px + env(safe-area-inset-top, 0px));
+            padding-bottom: calc(15px + env(safe-area-inset-bottom, 0px));
             margin: 0;
         }
 
@@ -66,6 +71,8 @@
             transition: all 0.3s;
         }
 
+        .insta-link:active { transform: scale(0.97); }
+
         .btn-cardapio {
             display: block;
             width: 100%;
@@ -81,6 +88,8 @@
             transition: 0.3s;
         }
 
+        .btn-cardapio:active { background: var(--primary-light); transform: scale(0.98); }
+
         label {
             font-weight: 700;
             display: block;
@@ -95,7 +104,17 @@
             color: var(--primary);
         }
 
-        select, input {
+        .hint {
+            font-weight: 400;
+            text-transform: none;
+            letter-spacing: normal;
+            color: #999;
+            font-size: 0.85em;
+            display: block;
+            margin-top: 2px;
+        }
+
+        select, input, textarea {
             width: 100%;
             padding: 14px;
             margin-top: 6px;
@@ -106,11 +125,19 @@
             transition: 0.3s;
             font-size: 15px;
             background-color: #fff;
+            font-family: inherit;
         }
 
-        select:focus, input:focus {
+        textarea { resize: vertical; min-height: 70px; }
+
+        select:focus, input:focus, textarea:focus {
             border-color: var(--primary);
             box-shadow: 0 0 0 4px rgba(216, 27, 96, 0.1);
+        }
+
+        select.invalid, input.invalid, textarea.invalid {
+            border-color: var(--error);
+            box-shadow: 0 0 0 4px rgba(229, 57, 53, 0.1);
         }
 
         /* Card Selectors */
@@ -131,6 +158,8 @@
             background: #fff;
         }
 
+        .card-option:active { transform: scale(0.97); }
+
         .card-option strong {
             display: block;
             color: var(--primary-dark);
@@ -147,6 +176,8 @@
             background-color: var(--primary-light);
             box-shadow: 0 4px 10px rgba(216, 27, 96, 0.15);
         }
+
+        .card-option.invalid { border-color: var(--error); }
 
         /* Caixa de Resumo */
         .resumo-box {
@@ -216,6 +247,18 @@
         .termos input { width: auto; margin-top: 3px; }
         .termos span { font-size: 0.85em; color: var(--primary); line-height: 1.4; }
 
+        .msg-erro {
+            display: none;
+            background: #ffebee;
+            border: 2px solid var(--error);
+            color: var(--error);
+            padding: 12px;
+            border-radius: var(--border-radius);
+            margin-top: 15px;
+            font-size: 0.88em;
+            font-weight: 600;
+        }
+
         button.btn-whatsapp {
             width: 100%;
             background: #25d366;
@@ -231,7 +274,85 @@
             transition: 0.3s;
         }
 
+        button.btn-whatsapp:active { transform: scale(0.98); }
+
         .hidden { display: none; }
+
+        /* Splash / Abertura */
+        #splash {
+            position: fixed;
+            inset: 0;
+            z-index: 2000;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            text-align: center;
+            padding: 30px;
+            background: linear-gradient(rgba(30,10,20,0.35), rgba(80,10,40,0.65)), url('capa-bolo.jpg');
+            background-size: cover;
+            background-position: center 30%;
+            overflow: hidden;
+        }
+
+        #splash .sprinkle {
+            position: absolute;
+            font-size: 1.6em;
+            opacity: 0.55;
+            animation: cair linear infinite;
+        }
+
+        @keyframes cair {
+            0% { transform: translateY(-10vh) rotate(0deg); opacity: 0; }
+            10% { opacity: 0.55; }
+            100% { transform: translateY(110vh) rotate(360deg); opacity: 0.2; }
+        }
+
+        #splash .splash-emoji {
+            font-size: 4.2em;
+            animation: surgir 0.9s ease-out;
+            filter: drop-shadow(0 8px 16px rgba(0,0,0,0.25));
+        }
+
+        #splash h1 {
+            color: #fff;
+            font-size: 2.1em;
+            margin: 10px 0 6px 0;
+            text-shadow: 0 4px 12px rgba(0,0,0,0.2);
+            animation: surgir 0.9s ease-out 0.15s backwards;
+        }
+
+        #splash p {
+            color: #fff0f5;
+            font-size: 1em;
+            font-style: italic;
+            margin: 0 0 30px 0;
+            max-width: 300px;
+            animation: surgir 0.9s ease-out 0.3s backwards;
+        }
+
+        #splash .btn-entrar {
+            background: #fff;
+            color: var(--primary);
+            border: none;
+            padding: 16px 38px;
+            border-radius: 50px;
+            font-size: 1.05em;
+            font-weight: bold;
+            cursor: pointer;
+            box-shadow: 0 8px 20px rgba(0,0,0,0.25);
+            animation: surgir 0.9s ease-out 0.45s backwards;
+            transition: transform 0.2s;
+        }
+
+        #splash .btn-entrar:active { transform: scale(0.96); }
+
+        @keyframes surgir {
+            from { opacity: 0; transform: translateY(18px) scale(0.96); }
+            to { opacity: 1; transform: translateY(0) scale(1); }
+        }
+
+        #pedidoContainer.hidden-splash { display: none; }
 
         /* Modal Galeria */
         .modal {
@@ -258,7 +379,7 @@
 
         .close-modal {
             position: absolute;
-            top: 15px;
+            top: calc(15px + env(safe-area-inset-top, 0px));
             right: 25px;
             color: white;
             font-size: 40px;
@@ -269,7 +390,21 @@
 </head>
 <body>
 
-<div class="container">
+<div id="splash">
+    <span class="sprinkle" style="left:8%; animation-duration:6s; animation-delay:0s;">🍫</span>
+    <span class="sprinkle" style="left:22%; animation-duration:8s; animation-delay:1.2s;">🍓</span>
+    <span class="sprinkle" style="left:40%; animation-duration:7s; animation-delay:0.5s;">🧁</span>
+    <span class="sprinkle" style="left:60%; animation-duration:9s; animation-delay:2s;">🍒</span>
+    <span class="sprinkle" style="left:78%; animation-duration:6.5s; animation-delay:0.8s;">🍫</span>
+    <span class="sprinkle" style="left:90%; animation-duration:7.5s; animation-delay:1.6s;">🍓</span>
+
+    <div class="splash-emoji">🎂</div>
+    <h1>JaneleneCakes</h1>
+    <p>Cada bolo é feito com carinho, pra adoçar o seu momento especial 💝</p>
+    <button type="button" class="btn-entrar" onclick="iniciarPedido()">Fazer Meu Pedido 🎉</button>
+</div>
+
+<div class="container" id="pedidoContainer" style="display:none;">
     <div class="header">
         <h2>🎂 JaneleneCakes</h2>
         <p class="subtitle">Confeitaria Artesanal & Afeto 💝</p>
@@ -278,24 +413,27 @@
         </a>
     </div>
 
-    <button class="btn-cardapio" onclick="abrirModal()">📖 Ver Cardápio & Fotos de Referência</button>
+    <button type="button" class="btn-cardapio" onclick="abrirModal()">📖 Ver Cardápio & Fotos de Referência</button>
 
-    <label>Seu Nome <span class="req">*</span></label>
+    <label for="nome">Seu Nome <span class="req">*</span></label>
     <input type="text" id="nome" placeholder="Ex: Maria Silva">
+
+    <label for="telefone">Seu WhatsApp <span class="req">*</span></label>
+    <input type="tel" id="telefone" placeholder="Ex: (85) 91234-5678" inputmode="tel">
 
     <div style="display: flex; gap: 10px;">
         <div style="flex: 1;">
-            <label>Data <span class="req">*</span></label>
+            <label for="data">Data <span class="req">*</span></label>
             <input type="date" id="data">
         </div>
         <div style="flex: 1;">
-            <label>Hora <span class="req">*</span></label>
+            <label for="hora">Hora <span class="req">*</span></label>
             <input type="time" id="hora">
         </div>
     </div>
 
     <label>Tamanho do Bolo <span class="req">*</span></label>
-    <div class="cards-grid">
+    <div class="cards-grid" id="gridTamanho">
         <div class="card-option" onclick="selecionarTamanho('100', '10', this)">
             <strong>10 Fatias</strong>
             <span>R$ 100,00</span>
@@ -316,7 +454,7 @@
     <input type="hidden" id="tamanho" value="">
 
     <div id="divDetalhesBolo">
-        <label>Massa do Bolo <span class="req">*</span></label>
+        <label for="massa">Massa do Bolo <span class="req">*</span></label>
         <select id="massa" onchange="atualizarResumo()">
             <option value="">-- Selecione a Massa --</option>
             <option>Baunilha</option>
@@ -327,7 +465,7 @@
             <option>Red Velvet</option>
         </select>
 
-        <label id="labelRecheio1">Sabor do Recheio <span class="req">*</span></label>
+        <label id="labelRecheio1" for="recheio1">Sabor do Recheio <span class="req">*</span></label>
         <select id="recheio1" onchange="calcular(); atualizarResumo();">
             <option value="">-- Selecione o Recheio --</option>
             <option value="0" data-nome="Brigadeiro Branco">Brigadeiro Branco</option>
@@ -342,7 +480,7 @@
         </select>
 
         <div id="divRecheio2" class="hidden">
-            <label>2º Sabor de Recheio (Opcional)</label>
+            <label for="recheio2">2º Sabor de Recheio (Opcional)</label>
             <select id="recheio2" onchange="calcular(); atualizarResumo();">
                 <option value="0" data-nome="Nenhum">-- Apenas 1 Sabor --</option>
                 <option value="0" data-nome="Brigadeiro Branco">Brigadeiro Branco</option>
@@ -357,7 +495,7 @@
             </select>
         </div>
 
-        <label>Topo do Bolo <span class="req">*</span></label>
+        <label for="topo">Topo do Bolo <span class="req">*</span></label>
         <select id="topo" onchange="calcular(); atualizarResumo();">
             <option value="">-- Selecione o Topo --</option>
             <option value="0">1. Sem topo</option>
@@ -366,14 +504,14 @@
     </div>
 
     <!-- Adicionar Cupcakes -->
-    <label>Deseja adicionar Cupcakes ao pedido? 🧁</label>
+    <label for="desejaCupcake">Deseja adicionar Cupcakes ao pedido? 🧁</label>
     <select id="desejaCupcake" onchange="toggleCupcakes(); calcular(); atualizarResumo();">
         <option value="nao">Não</option>
         <option value="sim">Sim</option>
     </select>
 
     <div id="divCupcakes" class="cupcake-box hidden">
-        <label style="margin-top:0;">Quantidade de Cupcakes:</label>
+        <label for="qtdCupcake" style="margin-top:0;">Quantidade de Cupcakes:</label>
         <select id="qtdCupcake" onchange="calcular(); atualizarResumo();">
             <option value="6">6 Unidades</option>
             <option value="10">10 Unidades</option>
@@ -383,13 +521,13 @@
             <option value="24">24 Unidades</option>
         </select>
 
-        <label>Topo no Cupcake?</label>
+        <label for="topoCupcake">Topo no Cupcake?</label>
         <select id="topoCupcake" onchange="calcular(); atualizarResumo();">
             <option value="6">Sem topo (R$ 6,00/un)</option>
             <option value="7">Com topo (R$ 7,00/un)</option>
         </select>
 
-        <label>Massa do Cupcake:</label>
+        <label for="massaCupcake">Massa do Cupcake:</label>
         <select id="massaCupcake" onchange="atualizarResumo()">
             <option value="">-- Selecione a Massa --</option>
             <option>Baunilha</option>
@@ -397,7 +535,7 @@
             <option>Formigueiro</option>
         </select>
 
-        <label>Recheio do Cupcake:</label>
+        <label for="recheioCupcake">Recheio do Cupcake:</label>
         <select id="recheioCupcake" onchange="atualizarResumo()">
             <option value="">-- Selecione o Recheio --</option>
             <option>Brigadeiro Branco</option>
@@ -405,7 +543,10 @@
         </select>
     </div>
 
-    <label>Forma de Pagamento <span class="req">*</span></label>
+    <label for="observacoes">Observações <span class="hint">(opcional)</span></label>
+    <textarea id="observacoes" placeholder="Ex: alergias, mensagem no topo, detalhe de cor..."></textarea>
+
+    <label for="pagamento">Forma de Pagamento <span class="req">*</span></label>
     <select id="pagamento" onchange="exibirOpcoesCredito()">
         <option value="">-- Selecione o Pagamento --</option>
         <option value="Pix">Pix</option>
@@ -414,7 +555,7 @@
     </select>
 
     <div id="divParcelas" class="hidden">
-        <label>Quantidade de Parcelas:</label>
+        <label for="parcelas">Quantidade de Parcelas:</label>
         <select id="parcelas">
             <option value="1x">1x (à vista no crédito)</option>
             <option value="2x">2x</option>
@@ -450,22 +591,40 @@
         <span>Estou ciente de que os bolos possuem suporte interno e devem ser removidos ao cortar. ⚠️</span>
     </label>
 
-    <button class="btn-whatsapp" onclick="enviarWhatsApp()">Confirmar Pedido via WhatsApp 📱</button>
+    <div class="msg-erro" id="msgErro"></div>
+
+    <button type="button" class="btn-whatsapp" onclick="enviarWhatsApp()">Confirmar Pedido via WhatsApp 📱</button>
 </div>
 
 <!-- Modal com Imagem do Cardápio -->
 <div id="modalCardapio" class="modal" onclick="fecharModal()">
     <span class="close-modal">&times;</span>
-    <img class="modal-content" src="IMG-20260424-WA0001.jpg?v=2" alt="Cardápio JaneleneCakes">
+    <img class="modal-content" src="IMG-20260424-WA0001.jpg?v=2" alt="Cardápio JaneleneCakes" onclick="event.stopPropagation()">
 </div>
 
 <script>
     document.getElementById('data').min = new Date().toISOString().split("T")[0];
 
+    function iniciarPedido() {
+        const splash = document.getElementById('splash');
+        const container = document.getElementById('pedidoContainer');
+        splash.style.opacity = '0';
+        splash.style.transition = 'opacity 0.4s ease';
+        setTimeout(() => {
+            splash.style.display = 'none';
+            container.style.display = 'block';
+            window.scrollTo(0, 0);
+        }, 380);
+    }
+
     let fatiasSelecionadas = "";
 
+    function limparErro(campo) {
+        campo.classList.remove('invalid');
+    }
+
     function selecionarTamanho(valor, fatias, elemento) {
-        document.querySelectorAll('.card-option').forEach(c => c.classList.remove('selected'));
+        document.querySelectorAll('.card-option').forEach(c => c.classList.remove('selected', 'invalid'));
         elemento.classList.add('selected');
         document.getElementById('tamanho').value = valor;
         fatiasSelecionadas = fatias;
@@ -564,46 +723,72 @@
     function fecharModal() { document.getElementById('modalCardapio').style.display = "none"; }
 
     function enviarWhatsApp() {
-        const nome = document.getElementById('nome').value;
-        const data = document.getElementById('data').value;
-        const hora = document.getElementById('hora').value;
+        const nome = document.getElementById('nome').value.trim();
+        const telefoneEl = document.getElementById('telefone');
+        const telefone = telefoneEl.value.trim();
+        const dataEl = document.getElementById('data');
+        const horaEl = document.getElementById('hora');
+        const data = dataEl.value;
+        const hora = horaEl.value;
         const tam = document.getElementById('tamanho').value;
-        const massa = document.getElementById('massa').value;
-        const recheio1 = document.getElementById('recheio1').value;
-        const topo = document.getElementById('topo').value;
-        const pag = document.getElementById('pagamento').value;
-        const aceite = document.getElementById('aceiteTermos').checked;
+        const massaEl = document.getElementById('massa');
+        const massa = massaEl.value;
+        const recheio1El = document.getElementById('recheio1');
+        const recheio1 = recheio1El.value;
+        const topoEl = document.getElementById('topo');
+        const topo = topoEl.value;
+        const pagamentoEl = document.getElementById('pagamento');
+        const pag = pagamentoEl.value;
+        const aceiteEl = document.getElementById('aceiteTermos');
+        const aceite = aceiteEl.checked;
+        const observacoes = document.getElementById('observacoes').value.trim();
 
         const querCupcake = document.getElementById('desejaCupcake').value;
-        const massaCupcake = document.getElementById('massaCupcake').value;
-        const recheioCupcake = document.getElementById('recheioCupcake').value;
+        const massaCupcakeEl = document.getElementById('massaCupcake');
+        const massaCupcake = massaCupcakeEl.value;
+        const recheioCupcakeEl = document.getElementById('recheioCupcake');
+        const recheioCupcake = recheioCupcakeEl.value;
 
-        if(!nome || !data || !hora || !pag) { 
-            alert("Por favor, preencha Nome, Data, Hora e Forma de Pagamento!"); 
-            return; 
+        // limpa marcações de erro anteriores
+        [telefoneEl, dataEl, horaEl, massaEl, recheio1El, topoEl, pagamentoEl, massaCupcakeEl, recheioCupcakeEl]
+            .forEach(el => el.classList.remove('invalid'));
+        document.querySelectorAll('.card-option').forEach(c => c.classList.remove('invalid'));
+        document.getElementById('nome').classList.remove('invalid');
+
+        const erros = [];
+
+        if (!nome) { document.getElementById('nome').classList.add('invalid'); erros.push('Nome'); }
+        if (!telefone) { telefoneEl.classList.add('invalid'); erros.push('WhatsApp'); }
+        if (!data) { dataEl.classList.add('invalid'); erros.push('Data'); }
+        if (!hora) { horaEl.classList.add('invalid'); erros.push('Hora'); }
+        if (!pag) { pagamentoEl.classList.add('invalid'); erros.push('Forma de Pagamento'); }
+
+        if (!tam && querCupcake === "nao") {
+            document.getElementById('gridTamanho').querySelectorAll('.card-option').forEach(c => c.classList.add('invalid'));
+            erros.push('Tamanho do Bolo (ou adicione Cupcakes)');
         }
 
-        if(!tam && querCupcake === "nao") {
-            alert("Escolha um tamanho de bolo ou marque 'Sim' nos cupcakes!");
+        if (tam !== "") {
+            if (!massa) { massaEl.classList.add('invalid'); erros.push('Massa do Bolo'); }
+            if (recheio1 === "") { recheio1El.classList.add('invalid'); erros.push('Recheio do Bolo'); }
+            if (topo === "") { topoEl.classList.add('invalid'); erros.push('Topo do Bolo'); }
+        }
+
+        if (querCupcake === "sim") {
+            if (!massaCupcake) { massaCupcakeEl.classList.add('invalid'); erros.push('Massa do Cupcake'); }
+            if (!recheioCupcake) { recheioCupcakeEl.classList.add('invalid'); erros.push('Recheio do Cupcake'); }
+        }
+
+        if (!aceite) { erros.push('Confirmação sobre os suportes internos'); }
+
+        const msgErroBox = document.getElementById('msgErro');
+        if (erros.length > 0) {
+            msgErroBox.style.display = 'block';
+            msgErroBox.innerText = '⚠️ Preencha: ' + erros.join(', ');
+            msgErroBox.scrollIntoView({ behavior: 'smooth', block: 'center' });
             return;
         }
-
-        if(tam !== "") {
-            if(!massa || recheio1 === "" || topo === "") {
-                alert("Preencha todos os campos do bolo (Massa, Recheio e Topo)!");
-                return;
-            }
-        }
-
-        if (querCupcake === "sim" && (!massaCupcake || !recheioCupcake)) {
-            alert("Selecione a Massa e Recheio do Cupcake!");
-            return;
-        }
-
-        if(!aceite) {
-            alert("Por favor, confirme que está ciente sobre as hastes internas de sustentação.");
-            return;
-        }
+        msgErroBox.style.display = 'none';
 
         let fatias = "Não solicitado";
         let recheiosTexto = "Nenhum";
@@ -611,13 +796,13 @@
 
         if(tam !== "") {
             fatias = fatiasSelecionadas + " fatias";
-            const r1Nome = document.getElementById('recheio1').options[document.getElementById('recheio1').selectedIndex].getAttribute('data-nome');
+            const r1Nome = recheio1El.options[recheio1El.selectedIndex].getAttribute('data-nome');
             const r2Element = document.getElementById('recheio2');
             const r2Nome = r2Element.options[r2Element.selectedIndex].getAttribute('data-nome');
-            topoTexto = document.getElementById('topo').options[document.getElementById('topo').selectedIndex].text;
+            topoTexto = topoEl.options[topoEl.selectedIndex].text;
 
             recheiosTexto = r1Nome;
-            if (fatias !== "10 fatias" && r2Nome !== "Nenhum") { recheiosTexto += ` e ${r2Nome}`; }
+            if (fatiasSelecionadas !== "10" && r2Nome !== "Nenhum") { recheiosTexto += ` e ${r2Nome}`; }
         }
 
         const parcelas = document.getElementById('parcelas').value;
@@ -638,11 +823,13 @@
         
         let mensagem = `Olá Jane! Novo pedido solicitado:%0A%0A` +
             `👤 *Cliente:* ${nome}%0A` +
+            `📞 *WhatsApp:* ${telefone}%0A` +
             `📅 *Data:* ${dataBR} às ${hora}%0A` +
             `🎂 *Bolo:* ${fatias}%0A` +
             (tam !== "" ? `🍞 *Massa Bolo:* ${massa}%0A🍫 *Recheio Bolo:* ${recheiosTexto}%0A🎀 *Topo:* ${topoTexto}%0A` : "") +
-            `🧁 *Cupcakes:* ${textoCupcake}%0A%0A` +
-            `💵 *Pagamento:* ${formaPagamentoFinal}%0A` +
+            `🧁 *Cupcakes:* ${textoCupcake}%0A` +
+            (observacoes ? `📝 *Observações:* ${observacoes}%0A` : "") +
+            `%0A💵 *Pagamento:* ${formaPagamentoFinal}%0A` +
             `💰 *Valor Total:* R$ ${total}%0A` +
             `💳 *Entrada (50%):* R$ ${document.getElementById('valorSinal').innerText}%0A%0A` +
             `✅ *Ciente dos suportes internos.*`;
